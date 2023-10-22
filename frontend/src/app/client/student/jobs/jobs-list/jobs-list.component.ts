@@ -31,7 +31,8 @@ export class JobsListComponent implements OnInit {
     this.filteredData = this.jobs;
   }
 
-  addFilterTag(tag: string): void {
+  addFilterTag(tag: string, event: Event): void {
+    event.stopPropagation();
     if (this.filterTags.indexOf(tag) === -1) {
       this.filterTags.push(tag);
     }

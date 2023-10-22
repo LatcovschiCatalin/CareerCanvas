@@ -43,7 +43,7 @@
           </div>
         </div>
         <ul class="job-card__tags">
-          <li *ngFor="let tag of jobCard.tags" (click)="addFilterTag(tag)">{{ tag }}</li>
+          <li *ngFor="let tag of jobCard.tags" (click)="addFilterTag(tag, $event)">{{ tag }}</li>
         </ul>
       </li>
     </ul>

@@ -75,6 +75,23 @@
             "Home Improvement"
           ],
           "status": "waiting"
+        },
+        {
+          "title": "Dog walking",
+          "duration": "2h",
+          "image": "assets/images/dog.png",
+          "students": 1,
+          "deadline": "21/06/23",
+          "payment": "400 lei",
+          "location": "Chisinau, B. Dacia 4",
+          "description": "We need someone to walk our dogs outside by the parks that are around our house since we are in Portugal. It is needed to go one hour one day and the next day another hour. No experience needed.",
+          "recruiter": "ronaldo.cristiano7@getjob.com",
+          "id": 4,
+          "tags": [
+            "Pet Care",
+            "Dog Walking"
+          ],
+          "status": "waiting"
         }
       ],
       "id": 1
