@@ -47,18 +47,19 @@ export class RegisterComponent {
       validators: [this.validators.required]
     },
     {
+      title: 'Phone',
+      key: 'phone',
+      type: 'text',
+      class: 'w-full',
+      default: '',
+      validators: [this.validators.required, this.validators.phone]
+    },
+    {
       title: 'Email',
       key: 'email',
       type: 'text',
       default: '',
       validators: [this.validators.required, this.validators.email]
-    },
-    {
-      title: 'Phone',
-      key: 'phone',
-      type: 'text',
-      default: '',
-      validators: [this.validators.required, this.validators.phone]
     },
     {
       title: 'Password',
