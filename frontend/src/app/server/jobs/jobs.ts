@@ -7,5 +7,6 @@ export interface Jobs {
   "payment": string,
   "location": string,
   "description": string,
-  "recruiter": string
+  "recruiter": string,
+  "tags": string[]
 }
