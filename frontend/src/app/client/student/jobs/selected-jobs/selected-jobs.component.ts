@@ -11,18 +11,7 @@ import {CookieService} from "ngx-cookie-service";
 })
 export class SelectedJobsComponent implements OnInit {
 
-  jobs = [
-    {
-      "image": '',
-      "title": '',
-      "payment": '',
-      "deadline": '',
-      "duration": '',
-      "students": 0,
-      "description": '',
-      "location": '',
-    }
-  ]
+  jobs: any[] = []
 
   constructor(private usersService: UsersService, private cookieService: CookieService) {
   }

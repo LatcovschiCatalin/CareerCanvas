@@ -11,37 +11,33 @@
           Work time
         </div>
 
-        <div class="jobs">
-          <div class="job" *ngFor="let job of jobs">
-            <div class="image">
-              <img [src]="job?.image">
-            </div>
-            <div class="details">
-              <div class="title">
-                {{job?.title}}
-              </div>
-              <div class="benefits">
-                {{job?.payment}} ⚫ Duration {{job.duration}} ⚫ Left {{job.students}}
-              </div>
-              <div class="description">
-                {{job.description}}
-              </div>
-            </div>
-            <div class="time">
-              <a [href]="'https://www.google.com/maps/place/' + job.location">
-                <div class="location">
-                  <img src="https://cdn-icons-png.flaticon.com/512/64/64113.png">
-                  {{job.location}}
+        <ul class="col-12" id="job-list">
+          <li *ngFor="let jobCard of jobs; let i=index" class="job-card new featured">
+            <div class="job-card__info">
+              <div class="d-md-flex align-items-center job-data">
+                <div class="img-c">
+                  <img [src]="jobCard.image" alt="Company Logo">
                 </div>
-              </a>
-
-              <div class="deadline">
-                Deadline {{job.deadline}}
+                <div class="d-flex align-items-center">
+                  <div class="job-details">
+                    <p>{{ jobCard.recruiter }}</p>
+                    <p class="tag-new">New!</p>
+                    <p class="tag-featured">Featured</p>
+                  </div>
+                  <h6>{{ jobCard.title }}</h6>
+                  <ul>
+                    <li>{{ jobCard.duration }}</li>
+                    <li>{{ jobCard.payment }}</li>
+                    <li>{{ jobCard.location }}</li>
+                  </ul>
+                </div>
               </div>
             </div>
-
-          </div>
-        </div>
+            <ul class="job-card__tags">
+              <li *ngFor="let tag of jobCard.tags">{{ tag }}</li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
