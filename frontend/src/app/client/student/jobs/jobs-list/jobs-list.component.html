@@ -1,46 +1,47 @@
-<div class="list">
-  <div class="jobs-list">
-    <div class="search-engine">
-      <img src="https://static.vecteezy.com/system/resources/previews/001/504/972/non_2x/search-icon-free-vector.jpg">
-      <input type="text" placeholder="Search job title or keyword" [(ngModel)]="searchValue" (keydown.enter)=search()>
-      <button class="search" (click)="search()">Find jobs</button>
-    </div>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="search-engine">
+        <img src="https://static.vecteezy.com/system/resources/previews/001/504/972/non_2x/search-icon-free-vector.jpg">
+        <input type="text" placeholder="Search job title or keyword" [(ngModel)]="searchValue" (keydown.enter)=search()>
+        <button class="search" (click)="search()">Find jobs</button>
+      </div>
 
-    <div class="jobs-results">
-      {{this.filteredData.length}} Jobs results
-    </div>
-
-    <div class="jobs">
-      <div class="job" *ngFor="let job of filteredData">
-        <div class="image">
-          <img [src]="job.image">
-        </div>
-        <div class="details">
-          <div class="title">
-            {{job.title}}
-          </div>
-          <div class="benefits">
-            {{job.payment}} ⚫ Duration {{job.duration}} ⚫ Left {{job.students}}
-          </div>
-          <div class="description">
-            {{job.description}}
-          </div>
-        </div>
-        <div class="time">
-          <a [href]="'https://www.google.com/maps/place/' + job.location">
-            <div class="location">
-              <img src="https://cdn-icons-png.flaticon.com/512/64/64113.png">
-              {{job.location}}
-            </div>
-          </a>
-
-          <div class="deadline">
-            Deadline {{job.deadline}}
-          </div>
-          <button class="apply" (click)="apply(job['id'])">Apply</button>
-        </div>
-
+      <div class="filter-tags-c" *ngIf="filterTags.length">
+        <ul id="filter-tags-list" class="job-card__tags">
+          <li class="tag" *ngFor="let tag of filterTags" (click)="closeFilterTag(tag)">{{ tag }} <span class="close-span">×</span></li>
+        </ul>
+        <p class="clear-tags" id="js-clear-tags" (click)="clearFilterTags()">Clear</p>
       </div>
     </div>
+  </div>
+  <div class="row">
+    <ul class="col-12" id="job-list">
+      <li *ngFor="let jobCard of filteredData; let i=index" class="job-card new featured">
+        <div class="job-card__info">
+          <div class="d-md-flex align-items-center job-data">
+            <div class="img-c">
+              <img [src]="jobCard.image" alt="Company Logo">
+            </div>
+            <div class="d-flex align-items-center">
+              <div class="job-details">
+                <p>{{ jobCard.recruiter }}</p>
+                <p class="tag-new">New!</p>
+                <p class="tag-featured">Featured</p>
+              </div>
+              <h6>{{ jobCard.title }}</h6>
+              <ul>
+                <li>{{ jobCard.duration }}</li>
+                <li>{{ jobCard.payment }}</li>
+                <li>{{ jobCard.location }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <ul class="job-card__tags">
+          <li *ngFor="let tag of jobCard.tags" (click)="addFilterTag(tag)">{{ tag }}</li>
+        </ul>
+      </li>
+    </ul>
   </div>
 </div>

@@ -3,8 +3,6 @@ import {JobsService} from "../../../../server/jobs/jobs.service";
 import {Jobs} from "../../../../server/jobs/jobs";
 import {UsersService} from "../../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
-import {Users} from "../../../../server/users/users";
-import {of} from "rxjs";
 
 @Component({
   selector: 'app-jobs-list',
@@ -13,8 +11,37 @@ import {of} from "rxjs";
 })
 export class JobsListComponent implements OnInit {
 
+
   constructor(private jobsService: JobsService, private usersService: UsersService, private cookieService: CookieService) {
   }
+
+  filterTags: string[] = [];
+  closeFilterTag(tag: string): void {
+    const index = this.filterTags.indexOf(tag);
+    if (index !== -1) {
+      this.filterTags.splice(index, 1);
+    }
+
+    this.filteredData = this.jobs.filter((job) => {
+      return this.filterTags.every((filterTag) => job.tags.includes(filterTag));
+    });
+  }
+
+  clearFilterTags(): void {
+    this.filterTags = [];
+    this.filteredData = this.jobs;
+  }
+
+  addFilterTag(tag: string): void {
+    if (this.filterTags.indexOf(tag) === -1) {
+      this.filterTags.push(tag);
+    }
+
+    this.filteredData = this.jobs.filter((job) => {
+      return this.filterTags.every((filterTag) => job.tags.includes(filterTag));
+    });
+  }
+
 
   jobs: any[] = [];
 
