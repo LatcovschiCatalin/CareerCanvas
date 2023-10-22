@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {JobsService} from "../../../../server/jobs/jobs.service";
-import {Jobs} from "../../../../server/jobs/jobs";
 import {UsersService} from "../../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
 
@@ -87,36 +86,5 @@ export class JobsListComponent implements OnInit {
         return false;
       });
     });
-  }
-
-  apply(id: number) {
-    for (let i = 0; i < this.jobs.length; i++) {
-      // @ts-ignore
-      if (this.jobs[i]['id'] === id) {
-        let jobs: Jobs[] = this.user.jobs;
-        jobs.push(this.jobs[i]);
-        for (let j = 0; j < this.recruiters.length; j++) {
-          if (this.recruiters[j].email == this.jobs[i].recruiter) {
-            // @ts-ignore
-            let offers = this.recruiters[j].jobs;
-            // @ts-ignore
-            offers.push(this.user);
-            this.recruiters[j].jobs = offers
-            let id2 = this.recruiters[j].id
-            // @ts-ignore
-            this.usersService.put(this.recruiters[j], id2, 'recruiter').subscribe((res) => {
-            })
-            break;
-          }
-        }
-        // @ts-ignore
-        this.user.jobs = jobs
-        let id = this.user.id
-        // @ts-ignore
-        this.usersService.put(this.user, id, 'student').subscribe((res) => {
-        })
-        break;
-      }
-    }
   }
 }

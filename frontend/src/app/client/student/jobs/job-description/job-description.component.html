@@ -1,1 +1,36 @@
-<p>job-description works!</p>
+<div class="container">
+  <app-header></app-header>
+  <div class="row job" *ngIf="jobCard">
+    <div class="col-12">
+      <h1 class="job-title">{{ jobCard.title }}</h1>
+      <div class="job-details">
+        <div class="job-data">
+          <div class="img-c">
+            <img [src]="jobCard.image" alt="Company Logo">
+          </div>
+          <div class="job-card">
+            <div class="job-info">
+              <p class="recruiter">{{ jobCard.recruiter }}</p>
+              <p class="tag-new">New!</p>
+              <p class="tag-featured">Featured</p>
+            </div>
+            <ul class="job-info-list">
+              <li>{{ jobCard.duration }}</li>
+              <li>{{ jobCard.payment }}</li>
+              <li>{{ jobCard.location }}</li>
+            </ul>
+            <ul class="job-card__tags">
+              <li *ngFor="let tag of jobCard.tags">{{ tag }}</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      <div class="job-description">
+        <p>{{ jobCard.description }}</p>
+      </div>
+      <button class="apply-button" (click)="apply(jobId)">Apply Now</button>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

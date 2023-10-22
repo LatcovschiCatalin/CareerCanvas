@@ -328,7 +328,8 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       payment: '',
       location: '',
       description: '',
-      recruiter: this.cookieService.get('user')
+      recruiter: this.cookieService.get('user'),
+      tags: []
     };
     if (this.id != '-1') {
       this.jobsService.getById(this.id).subscribe((res) => {

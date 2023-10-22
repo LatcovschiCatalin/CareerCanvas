@@ -21,7 +21,7 @@
   </div>
   <div class="row">
     <ul class="col-12" id="job-list">
-      <li *ngFor="let jobCard of filteredData; let i=index" class="job-card new featured">
+      <li *ngFor="let jobCard of filteredData; let i=index" class="job-card new featured" [routerLink]="'/job/' + jobCard.id">
         <div class="job-card__info">
           <div class="d-md-flex align-items-center job-data">
             <div class="img-c">
