@@ -61,7 +61,8 @@ export class JobsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.jobsService.get().subscribe((res) => {
-      this.jobs = res;
+      console.log(res)
+      this.jobs = res.data;
       this.filteredData = this.jobs
     })
     this.usersService.get(this.cookieService.get('role')).subscribe((res) => {

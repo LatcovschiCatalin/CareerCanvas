@@ -1,8 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, get_jwt_identity, jwt_required
-import os   
+import os
+import math
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+
+CORS(app)
 
 import mysql.connector
 
@@ -89,7 +94,7 @@ def student_apply_handle():
         return response
     except mysql.connector.Error as err:
         return handle_bad_request(f"Error creating job: {err}")
-    
+
 from controller.userController import recruiter_get_job
 @app.route("/api/users/getjobs", methods=['GET'])
 def recruiter_get_job_handle():
@@ -104,7 +109,7 @@ def recruiter_get_job_handle():
         return response
     except mysql.connector.Error as err:
         return handle_bad_request(f"Error creating job: {err}")
-    
+
 #http://127.0.0.1:5000/api/users/getstudents?job_id=127
 from controller.userController import recruiter_get_applied_students
 @app.route("/api/users/getstudents", methods=['GET'])
@@ -125,7 +130,7 @@ def recruiter_get_applied_students_handle():
         return response
     except mysql.connector.Error as err:
         return handle_bad_request(f"Error creating job: {err}")
-    
+
 from controller.userController import change_applied_status
 @app.route("/api/users/changestatus", methods=['PUT'])
 def change_applied_status_handle():

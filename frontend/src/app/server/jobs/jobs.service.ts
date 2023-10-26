@@ -10,7 +10,7 @@ import {Jobs} from "./jobs";
   providedIn: 'root'
 })
 export class JobsService {
-  private apiServer = "http://localhost:3000";
+  private apiServer = "http://127.0.0.1:5000/api";
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -29,14 +29,14 @@ export class JobsService {
   }
 
   getById(id: any): Observable<Jobs> {
-    return this.httpClient.get<Jobs>(this.apiServer + `/jobs/` + id)
+    return this.httpClient.get<Jobs>(this.apiServer + `/jobs/page/` + id)
       .pipe(
         catchError(this.errorHandler)
       )
   }
 
-  get(): Observable<Jobs[]> {
-    return this.httpClient.get<Jobs[]>(this.apiServer + `/jobs/`)
+  get(): Observable<any> {
+    return this.httpClient.get<Jobs[]>(this.apiServer + `/jobs/page`)
       .pipe(
         catchError(this.errorHandler)
       )
