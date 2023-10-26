@@ -19,6 +19,5 @@ export interface Jobs {
 //   job_title: string;
 //   location: string;
 //   salary: string;
-//   "tags": string[]
 // }
 

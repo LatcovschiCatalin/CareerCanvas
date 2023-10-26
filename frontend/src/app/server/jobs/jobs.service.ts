@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -28,8 +28,10 @@ export class JobsService {
       )
   }
 
-  getById(id: any): Observable<Jobs> {
-    return this.httpClient.get<Jobs>(this.apiServer + `/jobs/page/` + id)
+  getById(job_id: any): Observable<any> {
+    const params = new HttpParams().set('job_id', job_id);
+
+    return this.httpClient.get<any>(this.apiServer + `/jobs/get`, {params})
       .pipe(
         catchError(this.errorHandler)
       )
