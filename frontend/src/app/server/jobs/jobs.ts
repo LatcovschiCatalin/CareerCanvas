@@ -10,3 +10,15 @@ export interface Jobs {
   "recruiter": string,
   "tags": string[]
 }
+
+// export interface Jobs {
+//   application_deadline: Date;
+//   created: Date;
+//   job_description: string;
+//   job_id: number;
+//   job_title: string;
+//   location: string;
+//   salary: string;
+//   "tags": string[]
+// }
+

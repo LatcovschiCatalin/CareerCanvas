@@ -33,10 +33,10 @@
                 <p class="tag-new">New!</p>
                 <p class="tag-featured">Featured</p>
               </div>
-              <h6>{{ jobCard.title }}</h6>
+              <h6>{{ jobCard.job_title }}</h6>
               <ul>
-                <li>{{ jobCard.duration }}</li>
-                <li>{{ jobCard.payment }}</li>
+                <li>{{ jobCard.application_deadline | date: "short" }}</li>
+                <li>{{ jobCard.salary + ' mdl' }}</li>
                 <li>{{ jobCard.location }}</li>
               </ul>
             </div>
