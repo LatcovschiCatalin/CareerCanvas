@@ -115,6 +115,102 @@ def delete_job_by_id(mycursor, db, request, user_id):
     else:
         return jsonify({"error": "User doesn't own this job"})
 
+
+def get_all_available_tags(mycursor):
+    mycursor.execute("SELECT tag_id, tag_name FROM jobrapid.tags")
+    tags = mycursor.fetchall()
+    # Returns as a tuple, use the tag_name for the frontend and return the tag_id to the backend
+    return tags
+
+# Adding tags to a job
+def add_tags_to_job(mycursor, db, request):
+    job_id = request.form.get('job_id')
+    tag_ids = request.form.get("tag_id")
+    mycursor.execute(f"SELECT COUNT(*) FROM jobrapid.jobs_tags WHERE job_id = {job_id}")
+    count = mycursor.fetchone()[0]
+    if not(count > 0):
+        if tag_ids:
+            try:
+                # example of tag_ids to provide - 1,3,5,6
+                tag_id_list = [int(tag_id) for tag_id in tag_ids.split(",")]
+                for tag_id in tag_id_list:
+                    sql = "INSERT INTO jobs_tags (job_id, tag_id) VALUES (%s, %s)"
+                    values = (job_id, tag_id)
+                    mycursor.execute(sql, values)
+                    db.commit()
+                return jsonify({"message": f"Tags added successfully for job_id = {job_id}"})
+            except ValueError as e:
+                return jsonify({"error": f"Invalid tag_id: {e}"})
+        else:
+            return jsonify({"error": "No tags provided"})
+    else:
+        return jsonify({"error": "Tags already added to this job. Please use update instead."})
+
+
+# Getting all the tags related to a job id
+def get_tags_for_job(mycursor, job_id):
+    mycursor.execute(f"SELECT t.tag_name FROM tags AS t INNER JOIN jobs_tags AS J ON t.tag_id = j.tag_id WHERE job_id = {job_id}")
+    result = mycursor.fetchall()
+    tag_names = [tag[0] for tag in result]
+    if tag_names:
+        return tag_names
+    else:
+        return jsonify({"error": "No tags found for this job"})
+
+
+# Remove tags from job
+def delete_tags_from_job(mycursor, request, db):
+    job_id = request.form.get('job_id')
+    tag_ids = request.form.get("tag_id")
+    if tag_ids:
+        try:
+            tag_id_list = [int(tag_id) for tag_id in tag_ids.split(",")]
+            for tag in tag_id_list:
+                mycursor.execute(f"DELETE FROM jobrapid.jobs_tags WHERE job_id = {job_id} AND tag_id = {tag}")
+                db.commit()
+            return jsonify({"message": "Tags successfully deleted"})
+        except ValueError as e:
+            return jsonify({"error": f"Invalid tag_id: {e}"})
+    else:
+        return jsonify({"error": "No tags given"})
+
+# Update tags for a job. NOTE: Ensure from the frontend that the user can't pick tags that he's already picked
+# i.e., give the backend only values that are VALID and NOT in the database already (for adding) and in the database
+# for deleting a tag
+def update_tags_for_job(mycursor, request, db):
+    job_id = request.form.get('job_id')
+    tag_id_add = request.form.get("tag_id_add")
+    tag_id_remove = request.form.get("tag_id_remove")
+    mycursor.execute(f"SELECT COUNT(*) FROM jobrapid.jobs_tags WHERE job_id = {job_id}")
+    count = mycursor.fetchone()[0]
+    if count > 0:
+        if tag_id_add or tag_id_remove:
+            try:
+                # example of tag_ids to provide - 1,3,5,6
+                tag_id_list = [int(tag_id) for tag_id in tag_id_add.split(",")]
+                for tag_id in tag_id_list:
+                    sql = "INSERT INTO jobs_tags (job_id, tag_id) VALUES (%s, %s)"
+                    values = (job_id, tag_id)
+                    mycursor.execute(sql, values)
+                    db.commit()
+            except ValueError as e:
+                return jsonify({"error": f"Invalid tag_id: {e}"})
+
+            try:
+                tag_id_list = [int(tag_id) for tag_id in tag_id_remove.split(",")]
+                for tag in tag_id_list:
+                    mycursor.execute(f"DELETE FROM jobrapid.jobs_tags WHERE job_id = {job_id} AND tag_id = {tag}")
+                    db.commit()
+            except ValueError as e:
+                return jsonify({"error": f"Invalid tag_id: {e}"})
+
+            return jsonify({"message": "Job tags successfully updated."})
+        else:
+            return jsonify({"error": "No tags given"})
+    else:
+        return jsonify({"error": "No job tags available for the job. Please use ADD instead."})
+
+
 def forms_request():
     title = request.form.get("job_title")
     description = request.form.get("job_description")

@@ -34,6 +34,7 @@ def register_user(mycursor, db, request, folder_name):
     gender = request.form.get('gender')
     skills = request.form.get('skills')
     password = request.form.get('password')
+    role = request.form.get('role')
     
     mycursor.execute("SELECT count(*) FROM user WHERE email=%s", (email,))
     checking_email = mycursor.fetchone()
@@ -50,14 +51,14 @@ def register_user(mycursor, db, request, folder_name):
     salt = bcrypt.gensalt(rounds=12)
     hashed_password = bcrypt.hashpw(password_bytes, salt)
 
-    sql = "INSERT INTO user (first_name, last_name, email, phone, date_of_birth, address, gender, skills, password, created, avatar) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    values = (first_name, last_name, email, phone, date_of_birth, address, gender, skills, hashed_password, datetime.now(), filename)
+    sql = "INSERT INTO user (first_name, last_name, email, phone, date_of_birth, address, gender, skills, password, created, avatar, role) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values = (first_name, last_name, email, phone, date_of_birth, address, gender, skills, hashed_password, datetime.now(), filename, role)
     mycursor.execute(sql, values)
     db.commit()
     return {"message": "Successfully registered"}
 
-def generate_token(id,first_name, last_name, email):
-    return create_access_token(identity={"id": id, "email": email,"first_name": first_name, "last_name": last_name}, expires_delta=timedelta(days=30))
+def generate_token(id,first_name, last_name, email, role):
+    return create_access_token(identity={"id": id, "email": email,"first_name": first_name, "last_name": last_name, "role": role}, expires_delta=timedelta(days=30))
 
 
 def login_user(mycursor, request):
@@ -65,12 +66,12 @@ def login_user(mycursor, request):
     password = request.form.get('password')
     if not(email and password):
         return {"error": "Please fill in all fields"}
-    mycursor.execute("SELECT user_id, password, first_name, last_name, email FROM user WHERE email=%s", (email, ))
+    mycursor.execute("SELECT user_id, password, first_name, last_name, email, role FROM user WHERE email=%s", (email, ))
     result = mycursor.fetchone()
     if(result is None):
         return {"error": "Invalid credentials"}
     if(bcrypt.checkpw(password.encode('utf-8'), result[1].encode('utf-8'))):
-        return {"token": generate_token(result[0],result[2], result[3], result[4])}
+        return {"token": generate_token(result[0],result[2], result[3], result[4], result[5])}
 
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 def verify_user(mycursor):
@@ -92,7 +93,7 @@ def verify_user(mycursor):
         return "Invalid token"
 
 def get_info(mycursor, user_id):
-    mycursor.execute("SELECT first_name, last_name, email, phone, date_of_birth, address, gender, skills, avatar FROM user WHERE user_id=%s", (user_id,))
+    mycursor.execute("SELECT first_name, last_name, email, phone, date_of_birth, address, gender, skills, avatar, role FROM user WHERE user_id=%s", (user_id,))
     result = mycursor.fetchone()
     print(result)
     return {
@@ -104,7 +105,8 @@ def get_info(mycursor, user_id):
         "address": result[5],
         "gender": result[6],
         "skills": result[7],
-        "avatar": result[8]
+        "avatar": result[8],
+        "role": result[9]
     }
 
 
@@ -160,3 +162,123 @@ def update_avatar_filename(mycursor, db, id, filename):
     mycursor.execute(sql, values)
     db.commit()
     return {"message": "Successfully updated"}
+
+
+def student_apply(mycursor, db, request, user_id):
+    job_id = request.form.get("job_id")
+    # Check if student already applied to this job
+    sql = "SELECT COUNT(*) FROM jobs WHERE job_id = %s"
+    values = (job_id,)  # Note the comma to create a tuple with a single element
+    mycursor.execute(sql, values)
+    check = mycursor.fetchone()
+    if check[0] < 1:
+        return {"error": "No such job id"}
+
+    sql = "SELECT COUNT(*) FROM student_job WHERE student_id = %s AND job_id = %s"
+    values = (user_id, job_id)
+    mycursor.execute(sql, values)
+    check = mycursor.fetchone()
+    if check[0] > 0:
+        return {"error": "Student already applied to this job"}
+    
+    sql = "INSERT INTO student_job (student_id, job_id, created_date, status) VALUES (%s, %s, %s, %s)"
+    values = (user_id, job_id, datetime.now(), "Waiting")
+    mycursor.execute(sql, values)
+    db.commit()
+    return {"message": "Student successfully applied"}
+
+def recruiter_get_job(mycursor, user_id):
+    sql = "SELECT * FROM jobs WHERE user_id = %s;"
+    values = (user_id,)
+    mycursor.execute(sql, values)
+    
+    jobs_list = []
+
+    for row in mycursor.fetchall():
+        job_dict = {
+            "job_id": row[0],
+            "title": row[1],
+            "description": row[2],
+            "user_id": row[3],
+        }
+        jobs_list.append(job_dict)
+
+    return jobs_list
+
+def recruiter_get_applied_students(mycursor, request,user_id):
+    job_id = request.args.get('job_id', type=int)
+    if job_id is None:
+        return {"error": "Should receive job_id"}
+    sql = "SELECT count(*) FROM jobs WHERE user_id = %s AND job_id = %s;"
+    values = (user_id, job_id)
+    mycursor.execute(sql, values)
+    check = mycursor.fetchone()
+
+    if check is None:
+        return {"error": "No such job or user didn't create this job"}
+
+    if check[0] < 1:
+        return {"error": "No such job or user didn't create this job"}
+
+    
+    sql = '''SELECT u.user_id, u.first_name, u.last_name, u.email, u.phone, 
+    u.date_of_birth, u.address, u.gender, u.skills, u.avatar, s.created_date, s.status
+    FROM user u JOIN student_job s ON u.user_id = s.student_id WHERE s.job_id=%s;'''
+    values = (job_id,)
+    mycursor.execute(sql, values)
+    
+    applied_students = []
+
+    for row in mycursor.fetchall():
+        student_dict = {
+            "user_id": row[0],
+            "first_name": row[1],
+            "last_name": row[2],
+            "email": row[3],
+            "phone": row[4],
+            "date_of_birth": row[5],
+            "address": row[6],
+            "gender": row[7],
+            "skills": row[8],
+            "avatar": row[9],
+            "created_date": row[10],
+            "status": row[11]
+        }
+        applied_students.append(student_dict)
+
+    return applied_students
+
+def change_applied_status(mycursor, db, request, user_id):
+    student_id = request.form.get("student_id")
+    job_id = request.form.get("job_id")
+    status = request.form.get("status")
+    sql = "SELECT count(*) FROM jobs WHERE user_id = %s AND job_id = %s;"
+    values = (user_id, job_id)
+    mycursor.execute(sql, values)
+    check = mycursor.fetchone()
+
+    if check is None:
+        return {"error": "No such job or user didn't create this job"}
+
+    if check[0] < 1:
+        return {"error": "No such job or user didn't create this job"}
+
+    sql = "SELECT count(*) FROM student_job WHERE student_id = %s AND job_id = %s;"
+    values = (student_id, job_id)
+    mycursor.execute(sql, values)
+    check = mycursor.fetchone()
+
+    if check is None:
+        return {"error": "Student didn't apply for this job"}
+
+    if check[0] < 1:
+        return {"error": "Student didn't apply for this job"}
+    
+    sql = '''UPDATE student_job SET status=%s WHERE job_id=%s AND student_id=%s'''
+    values = (status, job_id, student_id)
+    mycursor.execute(sql, values)
+    db.commit()
+    
+
+    
+    return {"message": "Successfully changed status"}
