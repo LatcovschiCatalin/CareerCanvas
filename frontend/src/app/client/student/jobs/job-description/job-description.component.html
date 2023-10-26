@@ -6,17 +6,21 @@
       <div class="job-details">
         <div class="job-data">
           <div class="img-c">
-            <img [src]="jobCard.image" alt="Company Logo">
+            <img src="assets/images/default-job.png" alt="Company Logo">
           </div>
           <div class="job-card">
             <div class="job-info">
-              <p class="recruiter">{{ jobCard.recruiter }}</p>
+              <p>{{ jobCard.author.first_name + ' ' + jobCard.author.last_name }}</p>
               <p class="tag-new">New!</p>
               <p class="tag-featured">Featured</p>
             </div>
+            <div class="job-info">
+              <a [href]="'mailto: ' + jobCard.author.email">{{ jobCard.author.email }}</a>
+              <a [href]="'tel: ' + jobCard.author.email">{{'+ ' + jobCard.author.phone }}</a>
+            </div>
             <ul class="job-info-list">
-              <li>{{ jobCard.duration }}</li>
-              <li>{{ jobCard.payment }}</li>
+              <li>{{ jobCard.application_deadline | date: "short" }}</li>
+              <li>{{ jobCard.salary + ' mdl' }}</li>
               <li>{{ jobCard.location }}</li>
             </ul>
             <ul class="job-card__tags">
@@ -29,7 +33,7 @@
       <div class="job-description">
         <p>{{ jobCard.description }}</p>
       </div>
-      <button class="apply-button" (click)="apply(jobId)">Apply Now</button>
+      <button class="apply-button" (click)="apply()">Apply Now</button>
     </div>
   </div>
   <app-footer></app-footer>
