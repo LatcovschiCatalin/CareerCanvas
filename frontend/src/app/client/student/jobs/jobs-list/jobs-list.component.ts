@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {JobsService} from "../../../../server/jobs/jobs.service";
 import {UsersService} from "../../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-jobs-list',
@@ -15,6 +16,7 @@ export class JobsListComponent implements OnInit {
   }
 
   filterTags: string[] = [];
+
   closeFilterTag(tag: string): void {
     const index = this.filterTags.indexOf(tag);
     if (index !== -1) {
@@ -47,35 +49,27 @@ export class JobsListComponent implements OnInit {
 
   filteredData = this.jobs;
   searchValue = '';
-
-  user = {
-    jobs: [],
-    id: 0
-  }
-
-  recruiters = [{
-    jobs: [],
-    id: 0,
-    email: ''
-  }]
+  currentPage = 1;
+  totalPages = 1;
+  limit = 10;
 
   ngOnInit(): void {
-    this.jobsService.get().subscribe((res) => {
-      console.log(res)
+    this.getJobs();
+  }
+
+  changePage(e: any){
+    this.currentPage = e.pageIndex + 1;
+    this.getJobs();
+  }
+
+  getJobs() {
+    this.jobsService.get(new HttpParams()
+      .set('criteria', 'created')
+      .set('order', 'ASC')
+      .set('page_num', String(this.currentPage))).subscribe((res) => {
+      this.totalPages = res.total_pages;
       this.jobs = res.data;
-      this.filteredData = this.jobs
-    })
-    this.usersService.get(this.cookieService.get('role')).subscribe((res) => {
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].email == this.cookieService.get('user')) {
-          // @ts-ignore
-          this.user = res[i];
-        }
-      }
-    })
-    this.usersService.get('recruiter').subscribe((res) => {
-      // @ts-ignore
-      this.recruiters = res;
+      this.filteredData = this.jobs;
     })
   }
 

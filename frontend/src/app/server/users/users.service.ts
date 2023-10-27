@@ -10,47 +10,75 @@ import {Users} from "./users";
   providedIn: 'root'
 })
 export class UsersService {
-  private apiServer = "http://localhost:3000";
+  private apiServer = "http://127.0.0.1:5000/api";
 
-  httpOptions = {
+   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('user_jwt')))}`
     })
-  }
+  };
 
   constructor(private httpClient: HttpClient) {
   }
 
-  post(user: Users, tab: String): Observable<Users> {
-    return this.httpClient.post<Users>(this.apiServer + `/${tab}/`, JSON.stringify(user), this.httpOptions)
+  // register(user: any): Observable<any> {
+  //   console.log(this.apiServer + `/users/registration/`)
+  //   return this.httpClient.post<Users>(this.apiServer + `/users/registration/`, user)
+  //     .pipe(
+  //       catchError(this.errorHandler)
+  //     )
+  // }
+
+  register(user: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('first_name', user.first_name);
+    formData.append('last_name', user.last_name);
+    formData.append('email', user.email);
+    formData.append('password', user.password);
+    formData.append('date_of_birth', user.date_of_birth);
+    formData.append('gender', user.gender);
+    formData.append('phone', user.phone);
+    formData.append('address', user.address);
+    formData.append('role', user.role);
+    formData.append('skills', user.skills);
+    formData.append('skills', user.skills);
+
+    return this.httpClient.post<Users>(this.apiServer + '/users/registration', formData)
       .pipe(
         catchError(this.errorHandler)
-      )
+      );
+  }
+
+
+  login(credentials: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('email', credentials.email);
+    formData.append('password', credentials.password);
+
+    return this.httpClient.post<Users>(this.apiServer + '/users/login', formData)
+      .pipe(
+        catchError(this.errorHandler)
+      );
+  }
+
+  verify(): Observable<any> {
+    return this.httpClient.get<any>(this.apiServer + '/users/verify', this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+      );
+  }
+
+  userInfo(): Observable<any> {
+    console.log(this.httpOptions)
+    return this.httpClient.get<any>(this.apiServer + '/users/getinfo', this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+      );
   }
 
   getById(id: any, tab: String): Observable<Users> {
     return this.httpClient.get<Users>(this.apiServer + `/${tab}/` + id)
-      .pipe(
-        catchError(this.errorHandler)
-      )
-  }
-
-  get(tab: String): Observable<Users[]> {
-    return this.httpClient.get<Users[]>(this.apiServer + `/${tab}/`)
-      .pipe(
-        catchError(this.errorHandler)
-      )
-  }
-
-  put(user: Users, id: any, tab: String): Observable<Users> {
-    return this.httpClient.put<Users>(this.apiServer + `/${tab}/` + id, JSON.stringify(user), this.httpOptions)
-      .pipe(
-        catchError(this.errorHandler)
-      )
-  }
-
-  deleteById(id: any, tab: String) {
-    return this.httpClient.delete<Users>(this.apiServer + `/${tab}/` + id, this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
       )

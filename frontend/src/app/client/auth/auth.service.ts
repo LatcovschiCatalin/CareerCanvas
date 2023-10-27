@@ -18,76 +18,45 @@ export class AuthService {
 
   token = 'usertoken123'
 
-  login(user: Users, tab: String) {
-    this.cookieService.delete('role');
-    this.cookieService.delete('user');
-    let findUser = false;
-    this.crudService.get(tab).subscribe((res) => {
-      for (let i = 0; i < res.length; i++) {
-        if (user.email === res[i].email) {
-          findUser = true;
-          this.cookieService.set('user', user.email);
-          // @ts-ignore
-          this.cookieService.set('role', tab);
-          localStorage.setItem('user_jwt', JSON.stringify(this.token));
-          this.router.navigateByUrl(`/` + (tab == 'recruiter' ? tab : ''));
-          this.snackBar.open('Welcome!', '', {
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            duration: 5000,
-            panelClass: 'success'
-          })
+  login(user: any) {
+    this.crudService.login(user).subscribe((res) => {
+      localStorage.setItem('user_jwt', res.token);
 
-          break;
-        }
-      }
-      if (!findUser) {
-        this.snackBar.open('The user is not found. Try again!', '', {
+      this.crudService.userInfo().subscribe((userInfo) => {
+        this.router.navigateByUrl(`/` + (userInfo.role.toLowerCase() === 'recruiter' ? userInfo.role.toLowerCase() : ''));
+        this.snackBar.open('Welcome!', '', {
           horizontalPosition: 'end',
           verticalPosition: 'top',
           duration: 5000,
-          panelClass: 'error'
+          panelClass: 'success'
         })
-      }
-    })
-  }
 
-  register(user: Users, tab: String) {
-    this.cookieService.delete('role');
-    this.cookieService.delete('user');
-
-    let post = true;
-    this.crudService.get(tab).subscribe((res) => {
-      for (let i = 0; i < res.length; i++) {
-        if (user.email === res[i].email) {
-          post = false;
-          this.snackBar.open('Users with this email already exists!', '', {
+        if (!res.token) {
+          this.snackBar.open('The user is not found. Try again!', '', {
             horizontalPosition: 'end',
             verticalPosition: 'top',
             duration: 5000,
             panelClass: 'error'
           })
-          break;
         }
-      }
-      if (post) {
-        this.crudService.post(user, tab).subscribe((res) => {
-          localStorage.setItem('user_jwt', JSON.stringify(this.token));
-          this.cookieService.set('user', user.email);
-          // @ts-ignore
-          this.cookieService.set('role', tab);
-          this.router.navigateByUrl(`/` + (tab == 'recruiter' ? tab : ''));
-          this.snackBar.open('Welcome!', '', {
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            duration: 5000,
-            panelClass: 'success'
-          })
-        })
-      }
-    })
+      })
 
-    return this.token;
+    })
+  }
+
+  register(user: any) {
+    this.crudService.register(user).subscribe((res) => {
+      if (!res) return;
+      localStorage.setItem('user_jwt', JSON.stringify(this.token));
+
+      this.router.navigateByUrl(`/` + (user.role.toLowerCase() === 'recruiter' ? user.role.toLowerCase() : ''));
+      this.snackBar.open('Welcome!', '', {
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        duration: 5000,
+        panelClass: 'success'
+      })
+    })
   }
 
   logout() {
@@ -117,22 +86,22 @@ export class AuthService {
   }
 
   getExpiration(token: string): number {
-    // const parsedJwt = this.parseJwt(token);
+    const parsedJwt = this.parseJwt(token);
 
-    // if (parsedJwt) {
-    //   return parsedJwt.exp;
-    // }
+    if (parsedJwt) {
+      return parsedJwt.exp;
+    }
 
     return moment().unix();
   }
 
-  // parseJwt(token: string) {
-  //   let base64Url = token?.split('.')[1];
-  //   let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  //   let jsonPayload = decodeURIComponent(window.atob(base64)?.split('').map(function (c) {
-  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  //   }).join(''));
-  //
-  //   return JSON.parse(jsonPayload);
-  // };
+  parseJwt(token: string) {
+    let base64Url = token?.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(window.atob(base64)?.split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  };
 }

@@ -8,7 +8,6 @@ app = Flask(__name__)
 
 
 CORS(app)
-
 import mysql.connector
 
 db = mysql.connector.connect(
@@ -23,12 +22,15 @@ app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
 jwt = JWTManager(app)
 
 from controller.userController import register_user
+
 @app.route("/api/users/registration", methods=['POST'])
 def register_handler():
     response = register_user(mycursor, db, request, app.config['UPLOAD_FOLDER'])
     if "error" in response:
+        print("Error")
         return jsonify({"error": response["error"]})
     else:
+        print("Return")
         return jsonify({"message": response["message"]})
 
 
@@ -58,7 +60,7 @@ def get_info_handler():
     if response == "Invalid token":
         return jsonify({"error": response})
     response = get_info(mycursor, response["id"])
-    response["avatar"] = encode_image_as_base64("uploads/"+response["avatar"])
+#     response["avatar"] = encode_image_as_base64("uploads/"+response["avatar"])
     return response
 
 import base64

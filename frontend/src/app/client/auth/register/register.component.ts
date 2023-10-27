@@ -34,14 +34,14 @@ export class RegisterComponent {
   formData = [
     {
       title: 'Name',
-      key: 'name',
+      key: 'first_name',
       type: 'text',
       default: '',
       validators: [this.validators.required]
     },
     {
       title: 'Surname',
-      key: 'surname',
+      key: 'last_name',
       type: 'text',
       default: '',
       validators: [this.validators.required]
@@ -50,7 +50,6 @@ export class RegisterComponent {
       title: 'Phone',
       key: 'phone',
       type: 'text',
-      class: 'w-full',
       default: '',
       validators: [this.validators.required, this.validators.phone]
     },
@@ -62,23 +61,54 @@ export class RegisterComponent {
       validators: [this.validators.required, this.validators.email]
     },
     {
+      title: 'Date of birth',
+      key: 'date_of_birth',
+      type: 'date',
+      default: '',
+      validators: [this.validators.required]
+    },
+    {
+      title: 'Address',
+      key: 'address',
+      type: 'text',
+      default: '',
+      validators: [this.validators.required]
+    },
+    {
+      title: 'Gender',
+      key: 'gender',
+      type: 'select',
+      default: 'M',
+      validators: [this.validators.required]
+    },
+    {
+      title: 'Skiils',
+      key: 'skills',
+      type: 'text',
+      default: '',
+      validators: []
+    },
+    {
       title: 'Password',
       key: 'password',
       type: 'password',
       default: '',
       validators: [this.validators.required]
     },
-
   ]
 
   constructor(private fb: FormBuilder,
               private authService: AuthService) {
 
     this.customForm = this.fb.group({
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(phoneNumberRegex)]],
+      date_of_birth: [null, [Validators.required]],
+      address: ['', [Validators.required]],
+      gender: ['', [Validators.required]],
+      skills: ['', [Validators.required]],
       password: ['', Validators.required],
     });
   }
@@ -88,12 +118,12 @@ export class RegisterComponent {
   }
 
   register() {
-    const user = this.customForm.value;
+    const user = { ...this.customForm.value, ...{role: this.tab.charAt(0).toUpperCase() + this.tab.slice(1)} };
     if (this.customForm.invalid) {
       this.customForm.markAllAsTouched();
       return false;
     } else {
-      this.authService.register({...user, "jobs": []}, this.tab);
+      this.authService.register(user);
     }
     return user;
   }

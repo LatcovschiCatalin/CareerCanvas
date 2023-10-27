@@ -11,8 +11,8 @@ export class OffertsComponent implements OnInit {
   jobs = [
     {
       "phone": '',
-      "name": '',
-      "surname": '',
+      "first_name": '',
+      "last_name": '',
     }
   ]
 
@@ -20,15 +20,15 @@ export class OffertsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usersService.get(this.cookieService.get('role')).subscribe((res) => {
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].email == this.cookieService.get('user')) {
-          // @ts-ignore
-          this.jobs = res[i];
-          // @ts-ignore
-          console.log(this.jobs['jobs'])
-        }
-      }
-    })
+    // this.usersService.get(this.cookieService.get('role')).subscribe((res) => {
+    //   for (let i = 0; i < res.length; i++) {
+    //     if (res[i].email == this.cookieService.get('user')) {
+    //       // @ts-ignore
+    //       this.jobs = res[i];
+    //       // @ts-ignore
+    //       console.log(this.jobs['jobs'])
+    //     }
+    //   }
+    // })
   }
 }
