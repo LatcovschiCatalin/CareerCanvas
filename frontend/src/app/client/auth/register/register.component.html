@@ -6,7 +6,7 @@
       <div *ngFor="let tab of tabs">
         <mat-tab [label]="tab">
           <div class="register-fields">
-            <div class="register-form" *ngFor="let item of formData; let i=index;"  [className]="item.class"
+            <div class="register-form" *ngFor="let item of formData; let i=index;"
                  [ngClass]="{'invalid': customForm.get(item.key)?.invalid && (customForm.get(item.key)?.dirty || customForm.get(item.key)?.touched)}">
               <label>{{item.title}}</label>
               <input class="sign-input"

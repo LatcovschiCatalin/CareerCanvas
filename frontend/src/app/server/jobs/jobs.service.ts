@@ -37,8 +37,8 @@ export class JobsService {
       )
   }
 
-  get(): Observable<any> {
-    return this.httpClient.get<Jobs[]>(this.apiServer + `/jobs/page`)
+  get(params: HttpParams): Observable<any> {
+    return this.httpClient.get<Jobs[]>(this.apiServer + `/jobs/page`, {params})
       .pipe(
         catchError(this.errorHandler)
       )

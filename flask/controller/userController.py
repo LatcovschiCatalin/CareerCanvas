@@ -44,8 +44,11 @@ def register_user(mycursor, db, request, folder_name):
     if not (first_name and last_name and email and phone and gender and password):
         return {"error": "Please fill in all fields"}
 
-    file = request.files['image']
-    filename = upload_avatar(file, folder_name)
+    print(role)
+#     file = request.files['image']
+#     filename = upload_avatar(file, folder_name)
+#     print(file)
+    filename = "NULL"
 
     password_bytes = password.encode('utf-8')
     salt = bcrypt.gensalt(rounds=12)
@@ -81,6 +84,7 @@ def verify_user(mycursor):
         return {"error": "Invalid token"}
     mycursor.execute("SELECT COUNT(*) FROM user WHERE user_id=%s and email=%s and first_name=%s and last_name=%s", (current_user["id"], current_user["email"], current_user["first_name"], current_user["last_name"]))
     checking_token = mycursor.fetchone()
+    # tokenul poate sa fie correct, dar user-ul pe care il contine poate sa nu fie in bd
     if(checking_token[0]>0):
         return current_user
         # return {
@@ -95,7 +99,6 @@ def verify_user(mycursor):
 def get_info(mycursor, user_id):
     mycursor.execute("SELECT first_name, last_name, email, phone, date_of_birth, address, gender, skills, avatar, role FROM user WHERE user_id=%s", (user_id,))
     result = mycursor.fetchone()
-    print(result)
     return {
         "first_name": result[0],
         "last_name": result[1],

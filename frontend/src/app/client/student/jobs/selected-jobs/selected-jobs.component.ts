@@ -17,13 +17,13 @@ export class SelectedJobsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usersService.get(this.cookieService.get('role')).subscribe((res) => {
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].email == this.cookieService.get('user')) {
-          this.jobs = res[i].jobs;
-        }
-      }
-    })
+    // this.usersService.get(this.cookieService.get('role')).subscribe((res) => {
+    //   for (let i = 0; i < res.length; i++) {
+    //     if (res[i].email == this.cookieService.get('user')) {
+    //       this.jobs = res[i].jobs;
+    //     }
+    //   }
+    // })
   }
 
 }

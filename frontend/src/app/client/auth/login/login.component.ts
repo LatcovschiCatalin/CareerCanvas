@@ -63,7 +63,7 @@ export class LoginComponent {
       this.customForm.markAllAsTouched();
       return false;
     } else {
-      this.authService.login({...user, "jobs": []}, this.tab);
+      this.authService.login(user);
     }
     return user;
   }

@@ -17,20 +17,17 @@ export class NavbarComponent implements OnInit {
   }
 
   user = {
-    "name": '',
-    "surname": ''
+    "first_name": '',
+    "last_name": ''
   }
 
   constructor(private authService: AuthService, private usersService: UsersService, private cookieService: CookieService) {
   }
 
   ngOnInit(): void {
-    this.usersService.get(this.cookieService.get('role')).subscribe((res) => {
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].email == this.cookieService.get('user')) {
-          this.user = res[i];
-        }
-      }
+    this.usersService.userInfo().subscribe((res) => {
+      console.log(res)
+      this.user = res;
     })
   }
 

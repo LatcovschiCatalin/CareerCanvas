@@ -48,4 +48,13 @@
       </li>
     </ul>
   </div>
+
+  <div class="row">
+    <mat-paginator [length]="(totalPages-1) * limit + filteredData.length"
+                   [pageSize]="limit"
+                   [pageIndex]="currentPage - 1"
+                   (page)="changePage($event)"
+                   aria-label="Select page">
+    </mat-paginator>
+  </div>
 </div>

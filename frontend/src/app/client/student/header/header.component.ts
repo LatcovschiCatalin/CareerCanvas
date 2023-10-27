@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UsersService} from "../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
+import {AuthService} from '../../auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,21 +11,21 @@ import {CookieService} from "ngx-cookie-service";
 export class HeaderComponent implements OnInit {
 
   user = {
-    "name": '',
-    "surname": ''
+    "first_name": '',
+    "last_name": ''
   }
 
-  constructor(private usersService: UsersService, private cookieService: CookieService) {
+  constructor(private usersService: UsersService, private authService: AuthService, private cookieService: CookieService) {
   }
 
   ngOnInit(): void {
-    this.usersService.get(this.cookieService.get('role')).subscribe((res) => {
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].email == this.cookieService.get('user')) {
-          this.user = res[i];
-        }
-      }
+    this.usersService.userInfo().subscribe((res) => {
+     this.user = res;
     })
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }
