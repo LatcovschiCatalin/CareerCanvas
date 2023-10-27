@@ -82,7 +82,7 @@ export class RegisterComponent {
       validators: [this.validators.required]
     },
     {
-      title: 'Skiils',
+      title: 'Skills',
       key: 'skills',
       type: 'text',
       default: '',

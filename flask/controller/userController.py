@@ -44,7 +44,6 @@ def register_user(mycursor, db, request, folder_name):
     if not (first_name and last_name and email and phone and gender and password):
         return {"error": "Please fill in all fields"}
 
-    print(role)
 #     file = request.files['image']
 #     filename = upload_avatar(file, folder_name)
 #     print(file)
@@ -77,6 +76,7 @@ def login_user(mycursor, request):
         return {"token": generate_token(result[0],result[2], result[3], result[4], result[5])}
 
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+
 def verify_user(mycursor):
     verify_jwt_in_request()
     current_user = get_jwt_identity()
@@ -84,6 +84,8 @@ def verify_user(mycursor):
         return {"error": "Invalid token"}
     mycursor.execute("SELECT COUNT(*) FROM user WHERE user_id=%s and email=%s and first_name=%s and last_name=%s", (current_user["id"], current_user["email"], current_user["first_name"], current_user["last_name"]))
     checking_token = mycursor.fetchone()
+    mycursor.fetchall()
+
     # tokenul poate sa fie correct, dar user-ul pe care il contine poate sa nu fie in bd
     if(checking_token[0]>0):
         return current_user
@@ -97,21 +99,28 @@ def verify_user(mycursor):
         return "Invalid token"
 
 def get_info(mycursor, user_id):
-    mycursor.execute("SELECT first_name, last_name, email, phone, date_of_birth, address, gender, skills, avatar, role FROM user WHERE user_id=%s", (user_id,))
-    result = mycursor.fetchone()
-    return {
-        "first_name": result[0],
-        "last_name": result[1],
-        "email": result[2],
-        "phone": result[3],
-        "date_of_birth": result[4],
-        "address": result[5],
-        "gender": result[6],
-        "skills": result[7],
-        "avatar": result[8],
-        "role": result[9]
-    }
+    try:
+        mycursor.execute("SELECT first_name, last_name, email, phone, date_of_birth, address, gender, skills, avatar, role FROM user WHERE user_id=%s", (user_id,))
+        result = mycursor.fetchone()
 
+        # Consume any pending results
+        mycursor.fetchall()
+        return {
+            "first_name": result[0],
+            "last_name": result[1],
+            "email": result[2],
+            "phone": result[3],
+            "date_of_birth": result[4],
+            "address": result[5],
+            "gender": result[6],
+            "skills": result[7],
+            "avatar": result[8],
+            "role": result[9]
+        }
+    except mysql.connector.Error as e:
+        # Handle the error, e.g., attempt to reconnect and retry the query.
+        return jsonify({"Error" : f"{e}"})
+        # You can implement reconnect logic here.
 
 def delete_avatar(filename, folder_name):
     try:

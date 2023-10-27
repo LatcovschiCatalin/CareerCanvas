@@ -36,6 +36,7 @@ def get_all_jobs(mycursor, request):
 
     mycursor.execute("SELECT COUNT(*) FROM user")
     total_records = mycursor.fetchone()[0]
+    mycursor.fetchall()
 
     total_pages = math.ceil(total_records/records_per_page)
     if(total_pages<page_num):

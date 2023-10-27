@@ -14,15 +14,24 @@ export class JobsService {
 
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('user_jwt')))}`
     })
   }
 
   constructor(private httpClient: HttpClient) {
   }
 
-  post(job: Jobs): Observable<Jobs> {
-    return this.httpClient.post<Jobs>(this.apiServer + `/jobs/`, JSON.stringify(job), this.httpOptions)
+  post(job: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('job_title', job.job_title);
+    formData.append('job_description', job.job_description);
+    formData.append('location', job.location);
+    formData.append('salary', job.salary);
+    formData.append('application_deadline', job.application_deadline);
+    formData.append('job_email', job.email);
+    formData.append('job_phone', job.phone);
+    return this.httpClient.post<Jobs>(this.apiServer + `/jobs/post`, formData, this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
       )
@@ -44,15 +53,25 @@ export class JobsService {
       )
   }
 
-  put(job: Jobs, id: any): Observable<Jobs> {
-    return this.httpClient.put<Jobs>(this.apiServer + `/jobs/` + id, JSON.stringify(job), this.httpOptions)
+  put(job: any, job_id: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('job_title', job.job_title);
+    formData.append('job_description', job.job_description);
+    formData.append('location', job.location);
+    formData.append('salary', job.salary);
+    formData.append('application_deadline', job.application_deadline);
+    formData.append('job_email', job.email);
+    formData.append('job_phone', job.phone);
+    const params = new HttpParams().set('job_id', job_id);
+    return this.httpClient.put<Jobs>(this.apiServer + `/jobs/`, formData, { params, headers: this.httpOptions.headers })
       .pipe(
         catchError(this.errorHandler)
       )
   }
 
-  deleteById(id: any) {
-    return this.httpClient.delete<Jobs>(this.apiServer + `/jobs/` + id, this.httpOptions)
+  delete(job_id: any): Observable<any> {
+    const params = new HttpParams().set('job_id', job_id);
+    return this.httpClient.delete<Jobs>(this.apiServer + `/jobs/`, { params, headers: this.httpOptions.headers })
       .pipe(
         catchError(this.errorHandler)
       )
