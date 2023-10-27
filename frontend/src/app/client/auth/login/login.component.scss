@@ -18,17 +18,19 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: url('https://raw.githubusercontent.com/Hashtechieofficial/Form-/main/background6.jpg') no-repeat center center;
+  background: url('https://c0.wallpaperflare.com/preview/847/634/542/black-business-camera-designer.jpg') no-repeat center center;
   background-size: cover;
+  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
 }
 
+
 .login-container {
   width: fit-content;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(169, 169, 169, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 20px;
   backdrop-filter: blur(15px);
@@ -43,8 +45,9 @@ body {
   width: 400px;
   height: auto;
   background-size: cover;
+  background-position: top;
   border-radius: 10px;
-  background: url("https://st3.depositphotos.com/1000816/18567/i/450/depositphotos_185675122-stock-photo-experienced-professionals-discussing-a-new.jpg") no-repeat center;
+  background: url("https://www.collegiateparent.com/wp-content/uploads/2020/02/male-student-job.jpg") no-repeat top;
 }
 
 .form-title {
