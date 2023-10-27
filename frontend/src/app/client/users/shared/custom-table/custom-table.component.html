@@ -1,7 +1,7 @@
 <div class="item-content">
   <div class="header">
     <div class="form">
-      <form [formGroup]="customForm" *ngIf="add">
+      <form [formGroup]="customForm" *ngIf="add" class="add">
 
         <div class="form-control" *ngFor="let item of formData; let i=index;"
              [ngClass]="{'invalid': customForm.get(item.key)?.invalid && (customForm.get(item.key)?.dirty || customForm.get(item.key)?.touched)}">

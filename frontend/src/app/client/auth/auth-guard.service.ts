@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
   canActivate(): Observable<boolean> {
     return this.crudService.verify().pipe(
       map(user => {
+        console.log(user)
         if (user.error) {
           this.router.navigate(['auth/login']);
           return false; // User is not authenticated

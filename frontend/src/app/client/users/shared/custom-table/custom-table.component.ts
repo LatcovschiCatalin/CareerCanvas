@@ -5,9 +5,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {FormBuilder, Validators} from "@angular/forms";
 import {Jobs} from "../../../../server/jobs/jobs";
-import {validationMessages} from "../../../constants";
+import {phoneNumberRegex, validationMessages} from "../../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {JobsService} from "../../../../server/jobs/jobs.service";
+import {UsersService} from "../../../../server/users/users.service";
 
 @Component({
   selector: 'app-custom-table',
@@ -25,6 +26,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     this.displayedColumns = [...this.sourceColumns?.map(el => el.key), 'actions'];
   };
 
+  user: any;
   displayedColumns: any;
   sourceColumns: any;
   limit = [10, 20, 50, 100];
@@ -49,46 +51,27 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       type: 'required',
       message: validationMessages.requiredField
     },
+    email: {
+      type: 'email',
+      message: validationMessages.email
+    },
+    phone: {
+      type: 'pattern',
+      args: phoneNumberRegex,
+      message: validationMessages.invalidPhone
+    },
   }
   formData = [
     {
-      title: 'Title',
-      key: 'title',
+      title: 'Job Title',
+      key: 'job_title',
       type: 'text',
       default: '',
       validators: [this.validators.required]
     },
     {
-      title: 'Duration',
-      key: 'duration',
-      type: 'text',
-      default: '',
-      validators: [this.validators.required]
-    },
-    {
-      title: 'Image url',
-      key: 'image',
-      type: 'text',
-      default: '',
-      validators: [this.validators.required]
-    },
-    {
-      title: 'Amount of students',
-      key: 'students',
-      type: 'number',
-      default: '',
-      validators: [this.validators.required]
-    },
-    {
-      title: 'Deadline',
-      key: 'deadline',
-      type: 'text',
-      default: '',
-      validators: [this.validators.required]
-    },
-    {
-      title: 'Payment',
-      key: 'payment',
+      title: 'Job Description',
+      key: 'job_description',
       type: 'text',
       default: '',
       validators: [this.validators.required]
@@ -101,31 +84,54 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       validators: [this.validators.required]
     },
     {
-      title: 'Description',
-      key: 'description',
+      title: 'Salary',
+      key: 'salary',
       type: 'text',
       default: '',
       validators: [this.validators.required]
     },
+    {
+      title: 'Deadline',
+      key: 'application_deadline',
+      type: 'date',
+      default: '',
+      validators: [this.validators.required]
+    },
+    {
+      title: 'Phone',
+      key: 'phone',
+      type: 'text',
+      default: '',
+      validators: [this.validators.required, this.validators.phone]
+    },
+    {
+      title: 'Email',
+      key: 'email',
+      type: 'text',
+      default: '',
+      validators: [this.validators.required, this.validators.email]
+    }
   ]
 
   customForm = this.formBuilder.group({
-    title: ['', Validators.required],
-    duration: ['', [Validators.required]],
-    image: ['', [Validators.required]],
-    students: [0, Validators.required],
-    deadline: ['', [Validators.required]],
-    payment: ['', [Validators.required]],
+    job_title: ['', Validators.required],
+    job_description: ['', [Validators.required]],
     location: ['', [Validators.required]],
-    description: ['', [Validators.required]],
+    salary: ['', Validators.required],
+    application_deadline: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', [Validators.required, Validators.pattern(phoneNumberRegex)]],
   });
 
   mode = ''
 
-  constructor(private snackBar: MatSnackBar, private router: Router, private jobsService: JobsService, private formBuilder: FormBuilder, private qpService: QueryParamsService, private route: ActivatedRoute, private cookieService: CookieService) {
+  constructor(private snackBar: MatSnackBar, private router: Router, private jobsService: JobsService, private formBuilder: FormBuilder, private qpService: QueryParamsService, private route: ActivatedRoute, private cookieService: CookieService, private usersService: UsersService) {
   }
 
   ngOnInit(): void {
+    this.usersService.userInfo().subscribe((user)=>{
+      this.user = user;
+    })
     this.mode = this.cookieService.get('mode') || 'dark';
 
     this.showSort(false);
@@ -192,20 +198,24 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   getData() {
-    this.tableConfig?.service.get().subscribe((data: any) => {
-      this.data = data.filter((el: Jobs) => {
-        return el.recruiter == this.cookieService.get('user');
-      });
-      this.qpService.updateParam('totalItems', this.data.length);
+    let elements: any[] = [];
+    this.usersService.userJobs().subscribe((data: any) => {
+      for (let i=0;i++; i<data.length){
+        this.jobsService.getById((data[i].job_id)).subscribe((res: any)=>{
+          elements.push(res)
+          this.data = elements;
+        })
+      }
+      this.qpService.updateParam('totalItems', elements.length);
 
-      this.search();
-      this.refreshPage();
+      // this.search();
+      // this.refreshPage();
     });
   }
 
   onDelete(id: any) {
     if (window.confirm('Are you sure you want to delete?')) {
-      this.tableConfig?.service.deleteById(id).subscribe(() => {
+      this.tableConfig?.service.delete(id).subscribe(() => {
         this.getData();
       });
       this.snackBar.open('Users deleted successfully', '', {
@@ -285,77 +295,70 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       this.customForm.markAllAsTouched();
       return false;
     } else {
-      // @ts-ignore
-      this.obj = {...this.customForm.value, "recruiter": this.cookieService.get('user')};
-      this.obj.students = Number(this.obj.students);
-      if (this.id != '-1') {
-        this.jobsService.put(this.obj, this.id).subscribe(() => {
+      const formValues = this.customForm.value;
+      const jobData = {
+        job_title: formValues.job_title,
+        job_description: formValues.job_description,
+        location: formValues.location,
+        salary: formValues.salary,
+        application_deadline: formValues.application_deadline,
+        job_email: formValues.email,
+        job_phone: formValues.phone,
+      };
+
+      if (this.id !== '-1') {
+        this.jobsService.put(jobData, this.id).subscribe(() => {
           this.getData();
           this.refreshForm();
           this.id = '-1';
-          this.snackBar.open('Users updated successfully', '', {
+          this.snackBar.open('Job updated successfully', '', {
             horizontalPosition: 'end',
             verticalPosition: 'top',
             duration: 5000,
             panelClass: 'success'
-          })
-
+          });
         });
       } else {
-        this.jobsService.post(this.obj).subscribe(() => {
+        // Create a new job posting
+        this.jobsService.post(jobData).subscribe(() => {
           this.getData();
           this.refreshForm();
           this.add = false;
+          this.snackBar.open('Job added successfully', '', {
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            duration: 5000,
+            panelClass: 'success'
+          });
         });
-        this.snackBar.open('Users added successfully', '', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'success'
-        })
       }
       return true;
     }
   }
 
   refreshForm() {
-    let data: Jobs = {
-      title: '',
-      duration: '',
-      image: '',
-      students: 0,
-      deadline: '',
-      payment: '',
-      location: '',
-      description: '',
-      recruiter: this.cookieService.get('user'),
-      tags: []
-    };
-    if (this.id != '-1') {
+    if (this.id !== '-1') {
       this.jobsService.getById(this.id).subscribe((res) => {
-        data = res;
-        this.customForm = this.formBuilder.group({
-          title: [data.title, Validators.required],
-          duration: [data.duration, [Validators.required]],
-          image: [data.image, [Validators.required]],
-          students: [Number(data.students), Validators.required],
-          deadline: [data.deadline, [Validators.required]],
-          payment: [data.payment, [Validators.required]],
-          location: [data.location, [Validators.required]],
-          description: [data.description, [Validators.required]],
+        const data = res;
+        this.customForm.patchValue({
+          job_title: data.title,
+          job_description: data.description,
+          location: data.location,
+          salary: data.salary,
+          application_deadline: data.application_deadline,
+          email: data.job_email,
+          phone: data.job_phone,
         });
-
-      })
+      });
     } else {
-      this.customForm = this.formBuilder.group({
-        title: ['', Validators.required],
-        duration: ['', [Validators.required]],
-        image: ['', [Validators.required]],
-        students: [0, Validators.required],
-        deadline: ['', [Validators.required]],
-        payment: ['', [Validators.required]],
-        location: ['', [Validators.required]],
-        description: ['', [Validators.required]],
+      this.customForm.reset({
+        job_title: '',
+        job_description: '',
+        location: '',
+        salary: '',
+        application_deadline: '',
+        email: '',
+        phone: '',
       });
     }
   }

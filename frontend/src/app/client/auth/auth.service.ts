@@ -16,13 +16,13 @@ export class AuthService {
     private crudService: UsersService) {
   }
 
-  token = 'usertoken123'
 
   login(user: any) {
     this.crudService.login(user).subscribe((res) => {
       localStorage.setItem('user_jwt', res.token);
 
       this.crudService.userInfo().subscribe((userInfo) => {
+        console.log(userInfo)
         this.router.navigateByUrl(`/` + (userInfo.role.toLowerCase() === 'recruiter' ? userInfo.role.toLowerCase() : ''));
         this.snackBar.open('Welcome!', '', {
           horizontalPosition: 'end',
@@ -47,10 +47,9 @@ export class AuthService {
   register(user: any) {
     this.crudService.register(user).subscribe((res) => {
       if (!res) return;
-      localStorage.setItem('user_jwt', JSON.stringify(this.token));
 
-      this.router.navigateByUrl(`/` + (user.role.toLowerCase() === 'recruiter' ? user.role.toLowerCase() : ''));
-      this.snackBar.open('Welcome!', '', {
+      this.router.navigateByUrl(`/auth/login`);
+      this.snackBar.open('Success. First you have to Login!', '', {
         horizontalPosition: 'end',
         verticalPosition: 'top',
         duration: 5000,

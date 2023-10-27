@@ -42,7 +42,6 @@ export class UsersService {
     formData.append('address', user.address);
     formData.append('role', user.role);
     formData.append('skills', user.skills);
-    formData.append('skills', user.skills);
 
     return this.httpClient.post<Users>(this.apiServer + '/users/registration', formData)
       .pipe(
@@ -70,12 +69,20 @@ export class UsersService {
   }
 
   userInfo(): Observable<any> {
-    console.log(this.httpOptions)
     return this.httpClient.get<any>(this.apiServer + '/users/getinfo', this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
       );
   }
+
+
+  userJobs(): Observable<any> {
+    return this.httpClient.get<any>(this.apiServer + '/users/getjobs', this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+      );
+  }
+
 
   getById(id: any, tab: String): Observable<Users> {
     return this.httpClient.get<Users>(this.apiServer + `/${tab}/` + id)

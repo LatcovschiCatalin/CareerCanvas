@@ -16,14 +16,14 @@ export class RoleGuard implements CanActivate {
       const token = this.auth.getToken();
 
       if (token) {
-        // const parsedToken = this.auth.parseJwt(token);
+        const parsedToken = this.auth.parseJwt(token).sub;
         let roles: string[] = ['student', 'recruiter'];
 
-        // if (parsedToken.role && typeof parsedToken.role === 'string') {
-        //   roles = [parsedToken.role]
-        // } else if (parsedToken.role?.length) {
-        //   roles = parsedToken.role;
-        // }
+        if (parsedToken.role && typeof parsedToken.role === 'string') {
+          roles = [parsedToken.role.toLowerCase()]
+        } else if (parsedToken.role?.length) {
+          roles = parsedToken.role.toLowerCase();
+        }
 
         if (!roles.length) {
           this._snackBar.open('You have no roles to access this route!', '401', {
@@ -32,6 +32,8 @@ export class RoleGuard implements CanActivate {
             duration: 5000,
             panelClass: 'error'
           })
+          this.router.navigate(['auth/login']);
+
           return of(false);
         } else {
           let allRolesEligible = true;
@@ -49,6 +51,7 @@ export class RoleGuard implements CanActivate {
               duration: 5000,
               panelClass: 'error'
             })
+            this.router.navigate(['auth/login']);
           }
 
           return of(allRolesEligible)
@@ -80,6 +83,8 @@ export class RoleGuard implements CanActivate {
             panelClass: 'error'
           }
         )
+      this.router.navigate(['auth/login']);
+
       return of(false);
     }
   }
