@@ -69,8 +69,22 @@ export class JobsListComponent implements OnInit {
       .set('page_num', String(this.currentPage))).subscribe((res) => {
       this.totalPages = res.total_pages;
       this.jobs = res.data;
+
+      // Call a function to set tags from job titles
+      this.setTagsFromTitles();
+
       this.filteredData = this.jobs;
     })
+  }
+
+  // Function to extract tags from job titles and update the 'tags' field
+  setTagsFromTitles() {
+    this.jobs.forEach((job) => {
+      // Extract tags from the job title (you can customize this part based on your data)
+      const title = job.job_title;
+      const tags = title.split(' '); // Split the title into words
+      job.tags = tags;
+    });
   }
 
   search() {

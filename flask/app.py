@@ -91,11 +91,13 @@ def student_apply_handle():
     print(response)
     if response["role"]=="Recruiter":
         return jsonify({"error": "Recruiter can't apply to a job"})
+
     try:
         response = student_apply(mycursor, db, request, response['id'])
         return response
     except mysql.connector.Error as err:
         return handle_bad_request(f"Error creating job: {err}")
+
 
 from controller.userController import recruiter_get_job
 @app.route("/api/users/getjobs", methods=['GET'])
@@ -103,7 +105,6 @@ def recruiter_get_job_handle():
     response = verify_handler()
     if response == "Invalid token":
         return jsonify({"error": response})
-    print(response)
     if response["role"]=="Student":
         return jsonify({"error": "Student can't access jobs list"})
     try:

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
-import { AuthService } from './auth.service';
-import { UsersService } from '../../server/users/users.service';
-import { tap, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {CanActivate, Router} from '@angular/router';
+import {AuthService} from './auth.service';
+import {UsersService} from '../../server/users/users.service';
+import {tap, map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -12,14 +12,14 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {
     return this.crudService.verify().pipe(
-      map(user => {
+      map((user: any) => {
         console.log(user)
-        if (user.error) {
-          this.router.navigate(['auth/login']);
-          return false; // User is not authenticated
-        }
-        return true; // User is authenticated
-      })
+    if (localStorage.getItem('user_jwt')) {
+      this.router.navigate(['auth/login']);
+      return false; // User is not authenticated
+    }
+    return true; // User is authenticated
+    })
     );
+    }
   }
-}

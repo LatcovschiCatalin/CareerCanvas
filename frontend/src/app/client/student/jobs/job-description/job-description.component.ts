@@ -32,14 +32,13 @@ export class JobDescriptionComponent implements OnInit {
 
   ngOnInit(): void {
     this.jobsService.getById(this.jobId).subscribe((res) => {
-      console.log(res)
       this.jobCard = res;
     })
   }
 
   apply() {
-    // this.usersService.put(this.user, this.jobId, 'student').subscribe((res) => {
-    //   this.router.navigate(['./mylist'])
-    // })
+    this.usersService.jobApply(String(this.jobId)).subscribe((res)=>{
+      console.log(res)
+    });
   }
 }
