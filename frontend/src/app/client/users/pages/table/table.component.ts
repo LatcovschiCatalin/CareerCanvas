@@ -10,49 +10,39 @@ import {JobsService} from "../../../../server/jobs/jobs.service";
 export class TableComponent implements OnInit {
   columns = [
     {
-      key: 'id',
-      type: 'text',
-      name: 'Id',
-    },
-    {
-      key: 'title',
+      key: 'job_title',
       name: 'Title',
       type: 'text',
     },
     {
-      key: 'duration',
+      key: 'job_description',
       type: 'text',
-      name: 'Duration',
-    },
-    {
-      key: 'image',
-      type: 'text',
-      name: 'image',
-    },
-    {
-      key: 'students',
-      type: 'number',
-      name: 'Amount students',
-    },
-    {
-      key: 'deadline',
-      type: 'text',
-      name: 'Deadline',
-    },
-    {
-      key: 'payment',
-      type: 'text',
-      name: 'Payment',
+      name: 'Description',
     },
     {
       key: 'location',
       type: 'text',
-      name: 'Location',
+      name: 'location',
     },
     {
-      key: 'description',
+      key: 'salary',
+      type: 'number',
+      name: 'Salary',
+    },
+    {
+      key: 'application_deadline',
+      type: 'date',
+      name: 'Deadline',
+    },
+    {
+      key: 'job_email',
       type: 'text',
-      name: 'Description',
+      name: 'Email',
+    },
+    {
+      key: 'job_phone',
+      type: 'text',
+      name: 'Phon',
     },
   ];
   actions: object[] = []

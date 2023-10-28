@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -14,7 +14,7 @@ export class UsersService {
 
    httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('user_jwt')))}`
     })
   };
@@ -81,6 +81,16 @@ export class UsersService {
       .pipe(
         catchError(this.errorHandler)
       );
+  }
+
+  jobApply(job_id: any): Observable<any> {
+    const form = new FormData();
+    form.append('job_id', String(job_id));
+
+    return this.httpClient.post((this.apiServer + `/users/apply`), form, this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+      )
   }
 
 
