@@ -1,3 +1,5 @@
 venv/
 __pycache__/
 forme/
+.idea/
+controller/__pycache__/
