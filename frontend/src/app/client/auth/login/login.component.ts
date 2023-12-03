@@ -3,12 +3,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {validationMessages} from "../../constants";
 import {MatTabChangeEvent} from "@angular/material/tabs";
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent {
   customForm: FormGroup;
@@ -44,7 +44,8 @@ export class LoginComponent {
   ]
 
   constructor(private fb: FormBuilder,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private router: Router) {
 
     this.customForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -63,7 +64,8 @@ export class LoginComponent {
       this.customForm.markAllAsTouched();
       return false;
     } else {
-      this.authService.login(user);
+      this.authService.login(user, this.tab.toLowerCase());
+
     }
     return user;
   }

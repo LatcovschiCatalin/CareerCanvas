@@ -14,21 +14,12 @@ export class UsersService {
 
    httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('user_jwt')))}`
     })
   };
 
   constructor(private httpClient: HttpClient) {
   }
-
-  // register(user: any): Observable<any> {
-  //   console.log(this.apiServer + `/users/registration/`)
-  //   return this.httpClient.post<Users>(this.apiServer + `/users/registration/`, user)
-  //     .pipe(
-  //       catchError(this.errorHandler)
-  //     )
-  // }
 
   register(user: any): Observable<any> {
     const formData = new FormData();
@@ -77,7 +68,7 @@ export class UsersService {
 
 
   userJobs(): Observable<any> {
-    return this.httpClient.get<any>(this.apiServer + '/users/getjobs', this.httpOptions)
+    return this.httpClient.get<any>(this.apiServer + '/users/getrecruiterjobs', this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
       );

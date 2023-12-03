@@ -2,21 +2,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 
-.mat-tab-label {
-  color: #fff;
+::ng-deep .mat-tab-label {
+  color: #fff !important;
   font-size: 18px;
 }
 
-.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+::ng-deep .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
   background: white;
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
+.content {
   font-family: 'Poppins', sans-serif;
   background: url('https://c0.wallpaperflare.com/preview/847/634/542/black-business-camera-designer.jpg') no-repeat center center;
   background-size: cover;
