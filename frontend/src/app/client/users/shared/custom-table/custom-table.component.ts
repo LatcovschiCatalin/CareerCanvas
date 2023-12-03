@@ -14,8 +14,6 @@ import {UsersService} from "../../../../server/users/users.service";
   selector: 'app-custom-table',
   templateUrl: './custom-table.component.html',
   styleUrls: ['./custom-table.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-
 })
 export class CustomTableComponent implements OnInit, OnDestroy {
   @Input() tableConfig: any;
@@ -99,14 +97,14 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     },
     {
       title: 'Phone',
-      key: 'phone',
+      key: 'job_phone',
       type: 'text',
       default: '',
       validators: [this.validators.required, this.validators.phone]
     },
     {
       title: 'Email',
-      key: 'email',
+      key: 'job_email',
       type: 'text',
       default: '',
       validators: [this.validators.required, this.validators.email]
@@ -119,8 +117,10 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     location: ['', [Validators.required]],
     salary: ['', Validators.required],
     application_deadline: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.pattern(phoneNumberRegex)]],
+    job_email: ['', [Validators.required, Validators.email]],
+    job_phone: ['', [Validators.required, Validators.pattern(phoneNumberRegex)]],
+    tags: [[]],
+    image: [null],
   });
 
   mode = ''
@@ -198,18 +198,13 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   getData() {
-    let elements: any[] = [];
     this.usersService.userJobs().subscribe((data: any) => {
-      for (let i=0;i++; i<data.length){
-        this.jobsService.getById((data[i].job_id)).subscribe((res: any)=>{
-          elements.push(res)
-          this.data = elements;
-        })
-      }
-      this.qpService.updateParam('totalItems', elements.length);
+      this.data = data;
 
-      // this.search();
-      // this.refreshPage();
+      this.qpService.updateParam('totalItems', data.length);
+
+      this.search();
+      this.refreshPage();
     });
   }
 
@@ -302,8 +297,8 @@ export class CustomTableComponent implements OnInit, OnDestroy {
         location: formValues.location,
         salary: formValues.salary,
         application_deadline: formValues.application_deadline,
-        job_email: formValues.email,
-        job_phone: formValues.phone,
+        job_email: formValues.job_email,
+        job_phone: formValues.job_phone,
       };
 
       if (this.id !== '-1') {
@@ -346,8 +341,10 @@ export class CustomTableComponent implements OnInit, OnDestroy {
           location: data.location,
           salary: data.salary,
           application_deadline: data.application_deadline,
-          email: data.job_email,
-          phone: data.job_phone,
+          job_email: data.job_email,
+          job_phone: data.job_phone,
+          tags: data.tags,
+          image: data.image,
         });
       });
     } else {
@@ -357,8 +354,10 @@ export class CustomTableComponent implements OnInit, OnDestroy {
         location: '',
         salary: '',
         application_deadline: '',
-        email: '',
-        phone: '',
+        job_email: '',
+        job_phone: '',
+        tags: null,
+        image: null,
       });
     }
   }

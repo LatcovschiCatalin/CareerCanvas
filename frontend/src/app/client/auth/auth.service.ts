@@ -17,13 +17,10 @@ export class AuthService {
   }
 
 
-  login(user: any) {
+  login(user: any, role: string) {
     this.crudService.login(user).subscribe((res) => {
       localStorage.setItem('user_jwt', res.token);
-
-      this.crudService.userInfo().subscribe((userInfo) => {
-        console.log(userInfo)
-        this.router.navigateByUrl(`/` + (userInfo.role.toLowerCase() === 'recruiter' ? userInfo.role.toLowerCase() : ''));
+        this.router.navigateByUrl(`/` + (role === 'recruiter' ? role : ''));
         this.snackBar.open('Welcome!', '', {
           horizontalPosition: 'end',
           verticalPosition: 'top',
@@ -39,8 +36,6 @@ export class AuthService {
             panelClass: 'error'
           })
         }
-      })
-
     })
   }
 

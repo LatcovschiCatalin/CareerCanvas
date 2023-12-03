@@ -25,6 +25,15 @@ def create_job_(connection_pool, request, user_id, folder_name):
     filename = request.files.get('image')
     filename = upload_avatar(filename, folder_name)
 
+    print(job_title)
+    print(job_description)
+    print(location)
+    print(salary)
+    print(application_deadline)
+    print(job_email)
+    print(job_phone)
+    print(request.form)
+
     # Insert the job data into the database
     sql = """
                 INSERT INTO jobs (job_title, job_description, location, salary, application_deadline, job_email, job_phone, user_id, created, image)

@@ -3,12 +3,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {phoneNumberRegex, validationMessages} from "../../constants";
 import {AuthService} from "../auth.service";
 import {MatTabChangeEvent} from "@angular/material/tabs";
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class RegisterComponent {
 
