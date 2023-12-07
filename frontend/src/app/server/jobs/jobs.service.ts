@@ -10,7 +10,7 @@ import {Jobs} from "./jobs";
   providedIn: 'root'
 })
 export class JobsService {
-  private apiServer = "http://127.0.0.1:5000/api";
+  private apiServer = "https://jobrapidflask-q35e2.ondigitalocean.app/api";
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -22,7 +22,6 @@ export class JobsService {
   }
 
   post(job: any): Observable<any> {
-    console.log(job)
     const date = job.application_deadline.split('-');
     const day = date[2];
     const month =  date[1];
@@ -35,8 +34,8 @@ export class JobsService {
     formData.append('location', job.location);
     formData.append('salary', job.salary);
     formData.append('application_deadline', `${day}-${month}-${year}`);
-    formData.append('job_email', job.email);
-    formData.append('job_phone', job.phone);
+    formData.append('job_email', job.job_email);
+    formData.append('job_phone', job.job_phone);
     formData.append('tags', job.tags);
     formData.append('image', job.image);
     return this.httpClient.post<any>(this.apiServer + `/jobs/post`, formData, this.httpOptions)
@@ -61,7 +60,7 @@ export class JobsService {
       )
   }
 
-  getTags(params: HttpParams): Observable<any> {
+  getTags(): Observable<any> {
     return this.httpClient.get<any>(this.apiServer + `/jobs/tags/get`, this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
@@ -88,7 +87,7 @@ export class JobsService {
 
   delete(job_id: any): Observable<any> {
     const params = new HttpParams().set('job_id', job_id);
-    return this.httpClient.delete<Jobs>(this.apiServer + `/jobs/`, { params, headers: this.httpOptions.headers })
+    return this.httpClient.delete<Jobs>(this.apiServer + `/users/deletejob`, { params, headers: this.httpOptions.headers })
       .pipe(
         catchError(this.errorHandler)
       )

@@ -7,7 +7,8 @@ import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {HttpClientModule} from "@angular/common/http";
 import {ViewDetailsModule} from "../pages/view-details/view-details.module";
-
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,8 @@ import {ViewDetailsModule} from "../pages/view-details/view-details.module";
     MatTableModule,
     MatPaginatorModule,
     ViewDetailsModule,
+    MatSelectModule,
+    MatFormFieldModule
   ]
 })
 export class SharedModule {

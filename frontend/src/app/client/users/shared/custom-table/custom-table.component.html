@@ -1,3 +1,4 @@
+<script src="custom-table.component.ts"></script>
 <div class="item-content">
   <div class="header">
     <div class="form">
@@ -6,11 +7,30 @@
         <div class="form-control" *ngFor="let item of formData; let i=index;"
              [ngClass]="{'invalid': customForm.get(item.key)?.invalid && (customForm.get(item.key)?.dirty || customForm.get(item.key)?.touched)}">
           <div class="label">{{item.title}}</div>
-          <input class="custom-input"
-                 [type]="item.type"
-                 [formControlName]="item.key"
-                 [placeholder]="'type ' + item.key"
-          />
+          <ng-container *ngIf="item.type !== 'file' && item.type !== 'select'; else other">
+            <input class="custom-input"
+                   [type]="item.type"
+                   [formControlName]="item.key"
+                   [placeholder]="'Enter ' + item.key"
+            />
+          </ng-container>
+
+          <ng-template #other>
+            <ng-container *ngIf="item.type === 'file'; else select">
+              <input type="file" class="custom-input"
+                     (change)="onFileSelected($event)" #fileUpload>
+            </ng-container>
+
+            <ng-template #select>
+              <mat-form-field>
+                <mat-select multiple [formControlName]="'tags'">
+                  <mat-option *ngFor="let tag of tags" [value]="tag.tag_id">{{tag.tag_name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-template>
+
+          </ng-template>
+
           <div
             *ngIf="customForm.get(item.key)?.invalid && (customForm.get(item.key)?.dirty || customForm.get(item.key)?.touched)"
             class="errors">
@@ -122,8 +142,9 @@
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let el">
             <div class="actions">
-              <div class="button" (click)="onAction(el.id == id && action.key == 'edit' ? 'save' : action.key, el.id)"
-                   *ngFor="let action of tableConfig?.actions">{{el.id == id && action.key == 'edit' ? 'Save' : action['name']}}</div>
+              <div class="button"
+                   (click)="onAction(el.job_id == id && action.key == 'edit' ? 'save' : action.key, el.job_id)"
+                   *ngFor="let action of tableConfig?.actions">{{el.job_id == id && action.key == 'edit' ? 'Save' : action['name']}}</div>
             </div>
           </td>
         </ng-container>

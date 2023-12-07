@@ -6,7 +6,12 @@
       <div class="job-details">
         <div class="job-data">
           <div class="img-c">
-            <img src="assets/images/default-job.png" alt="Company Logo">
+            <ng-container *ngIf="jobCard.image; else noImage">
+              <img [src]="jobCard.image" alt="Company Logo">
+            </ng-container>
+            <ng-template #noImage>
+              <img src="assets/images/default-job.png" alt="Company Logo">
+            </ng-template>
           </div>
           <div class="job-card">
             <div class="job-info">

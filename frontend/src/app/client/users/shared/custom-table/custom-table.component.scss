@@ -6,6 +6,14 @@
   padding-bottom: 12px;
 }
 
+.mat-form-field {
+  width: 100%;
+}
+
+::ng-deep.mat-pseudo-checkbox {
+  border-color: white !important;
+}
+
 .add {
   display: flex;
   flex-wrap: wrap;
@@ -233,6 +241,7 @@ form {
 .header {
   gap: 20px;
   align-items: flex-end;
+
   .button {
     margin: 0;
   }

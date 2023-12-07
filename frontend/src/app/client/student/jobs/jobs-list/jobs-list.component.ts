@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {JobsService} from "../../../../server/jobs/jobs.service";
 import {UsersService} from "../../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
@@ -12,7 +12,7 @@ import {HttpParams} from '@angular/common/http';
 export class JobsListComponent implements OnInit {
 
 
-  constructor(private jobsService: JobsService, private usersService: UsersService, private cookieService: CookieService) {
+  constructor(private cdr: ChangeDetectorRef, private jobsService: JobsService, private usersService: UsersService, private cookieService: CookieService) {
   }
 
   filterTags: string[] = [];
