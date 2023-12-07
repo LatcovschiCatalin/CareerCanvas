@@ -14,10 +14,21 @@
   border-color: white !important;
 }
 
+.add-tag {
+  display: flex;
+  align-items: center;
+}
+
+.add-tag .button {
+  padding: 11px;
+  border-radius: 10px;
+  font-size: 18px;
+}
+
 .add {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: left;
   gap: 20px;
 
@@ -224,7 +235,8 @@ th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:la
   .error {
     position: absolute;
     color: red;
-    margin-top: 5px;
+    margin-top: 7px;
+    font-size: 15px;
   }
 }
 
