@@ -22,7 +22,7 @@ export class TableComponent implements OnInit {
     {
       key: 'location',
       type: 'text',
-      name: 'location',
+      name: 'Location',
     },
     {
       key: 'salary',
@@ -42,7 +42,7 @@ export class TableComponent implements OnInit {
     {
       key: 'job_phone',
       type: 'text',
-      name: 'Phon',
+      name: 'Phone',
     },
   ];
   actions: object[] = []

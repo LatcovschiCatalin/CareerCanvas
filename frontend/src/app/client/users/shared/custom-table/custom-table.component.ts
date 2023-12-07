@@ -44,6 +44,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   id = '-1';
   // @ts-ignore
   obj: Jobs;
+  tags!: any[];
   validators = {
     required: {
       type: 'required',
@@ -108,6 +109,20 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       type: 'text',
       default: '',
       validators: [this.validators.required, this.validators.email]
+    },
+    {
+      title: 'Image',
+      key: 'image',
+      type: 'file',
+      default: '',
+      validators: []
+    },
+    {
+      title: 'Select tags',
+      key: 'tags',
+      type: 'select',
+      default: [],
+      validators: []
     }
   ]
 
@@ -120,17 +135,19 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     job_email: ['', [Validators.required, Validators.email]],
     job_phone: ['', [Validators.required, Validators.pattern(phoneNumberRegex)]],
     tags: [[]],
-    image: [null],
+    image: [new File([], '')],
   });
 
   mode = ''
 
-  constructor(private snackBar: MatSnackBar, private router: Router, private jobsService: JobsService, private formBuilder: FormBuilder, private qpService: QueryParamsService, private route: ActivatedRoute, private cookieService: CookieService, private usersService: UsersService) {
-  }
+  constructor(private snackBar: MatSnackBar, private router: Router, private jobsService: JobsService, private formBuilder: FormBuilder, private qpService: QueryParamsService, private route: ActivatedRoute, private cookieService: CookieService, private usersService: UsersService) {}
 
   ngOnInit(): void {
     this.usersService.userInfo().subscribe((user)=>{
       this.user = user;
+    })
+    this.jobsService.getTags().subscribe((tags)=>{
+      this.tags = tags;
     })
     this.mode = this.cookieService.get('mode') || 'dark';
 
@@ -138,6 +155,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     this.fieldWidth = (this.width - 126) / this.width * 100 / (this.displayedColumns.length - 1) / 100 * this.width;
     this.observables.push(this.route.queryParams.subscribe(res => {
       this.sort = res['sort'] || '';
+      this.order = res['order'] || 'ASC';
       this.order = res['order'] || 'ASC';
       this.searchTerm = res['searchTerm'] || '';
       if (res['page']) {
@@ -209,6 +227,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   onDelete(id: any) {
+    console.log(id)
     if (window.confirm('Are you sure you want to delete?')) {
       this.tableConfig?.service.delete(id).subscribe(() => {
         this.getData();
@@ -299,6 +318,8 @@ export class CustomTableComponent implements OnInit, OnDestroy {
         application_deadline: formValues.application_deadline,
         job_email: formValues.job_email,
         job_phone: formValues.job_phone,
+        tags: formValues.tags,
+        image: formValues.image,
       };
 
       if (this.id !== '-1') {
@@ -360,6 +381,14 @@ export class CustomTableComponent implements OnInit, OnDestroy {
         image: null,
       });
     }
+  }
+
+  onFileSelected(e: any) {
+    const file:File = e.target.files[0];
+    this.customForm.patchValue({
+      ...this.customForm.value,
+      image: file
+    })
   }
 
   ngOnDestroy() {

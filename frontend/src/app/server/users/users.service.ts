@@ -10,7 +10,7 @@ import {Users} from "./users";
   providedIn: 'root'
 })
 export class UsersService {
-  private apiServer = "http://127.0.0.1:5000/api";
+  private apiServer = "https://jobrapidflask-q35e2.ondigitalocean.app/api";
 
    httpOptions = {
     headers: new HttpHeaders({
@@ -60,6 +60,8 @@ export class UsersService {
   }
 
   userInfo(): Observable<any> {
+    const formData = new FormData();
+    formData.append('avaar', '');
     return this.httpClient.get<any>(this.apiServer + '/users/getinfo', this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
@@ -69,6 +71,13 @@ export class UsersService {
 
   userJobs(): Observable<any> {
     return this.httpClient.get<any>(this.apiServer + '/users/getrecruiterjobs', this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+      );
+  }
+
+  studentJobs(): Observable<any> {
+    return this.httpClient.get<any>(this.apiServer + '/users/getstudentjobs', this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
       );
