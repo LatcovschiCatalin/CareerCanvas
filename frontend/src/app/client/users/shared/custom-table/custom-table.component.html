@@ -28,7 +28,6 @@
                 </mat-select>
               </mat-form-field>
             </ng-template>
-
           </ng-template>
 
           <div
@@ -39,6 +38,18 @@
                 {{err.message}}
               </div>
             </div>
+          </div>
+        </div>
+        <div class="form-control">
+          <div class="label">Add tag</div>
+
+          <div class="add-tag">
+            <input class="custom-input"
+                   type="text"
+                   [formControl]="tag"
+                   [placeholder]="'Enter tag'"
+            />
+            <div class="button" (click)="addTag()">Add</div>
           </div>
         </div>
       </form>

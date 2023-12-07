@@ -3,7 +3,7 @@ import {QueryParamsService} from "../../../services/query-params.service";
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormBuilder, Validators, FormControl} from "@angular/forms";
 import {Jobs} from "../../../../server/jobs/jobs";
 import {phoneNumberRegex, validationMessages} from "../../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -45,6 +45,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   // @ts-ignore
   obj: Jobs;
   tags!: any[];
+  tag = new FormControl('');
   validators = {
     required: {
       type: 'required',
@@ -134,7 +135,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     application_deadline: ['', [Validators.required]],
     job_email: ['', [Validators.required, Validators.email]],
     job_phone: ['', [Validators.required, Validators.pattern(phoneNumberRegex)]],
-    tags: [[]],
+    tags: [['']],
     image: [new File([], '')],
   });
 
@@ -227,7 +228,6 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   onDelete(id: any) {
-    console.log(id)
     if (window.confirm('Are you sure you want to delete?')) {
       this.tableConfig?.service.delete(id).subscribe(() => {
         this.getData();
@@ -391,6 +391,17 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     })
   }
 
+  addTag() {
+    const tag = this.tag.value;
+    this.tag.reset();
+    const tags = this.tags;
+    tags.push({tag_id: 0, tag_name: tag});
+
+    // this.customForm.patchValue({
+    //   ...this.customForm,
+    //   tags: tags.length > 0 ? tags : null
+    // });
+  }
   ngOnDestroy() {
     this.observables.forEach(obs => {
       obs.unsubscribe();

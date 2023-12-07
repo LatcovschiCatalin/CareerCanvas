@@ -67,6 +67,15 @@ export class JobsService {
       )
   }
 
+  addTag(tag: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('tag', tag);
+    return this.httpClient.post<any>(this.apiServer + `/jobs/tags/post`, formData, this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+      )
+  }
+
   put(job: any, job_id: any): Observable<any> {
     const formData = new FormData();
     formData.append('job_title', job.job_title);
