@@ -6,7 +6,6 @@ __pycache__/
 forme/
 
 # Compiled output
-/dist
 /tmp
 /out-tsc
 /bazel-out
