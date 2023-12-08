@@ -93,6 +93,13 @@ export class UsersService {
       )
   }
 
+  deleteApply(job_id: any): Observable<any> {
+    const params = new HttpParams().set('job_id', job_id);
+    return this.httpClient.delete(this.apiServer + `/users/deleteapply`, { params, headers: this.httpOptions.headers })
+      .pipe(
+        catchError(this.errorHandler)
+      )
+  }
 
   getById(id: any, tab: String): Observable<Users> {
     return this.httpClient.get<Users>(this.apiServer + `/${tab}/` + id)
@@ -108,7 +115,6 @@ export class UsersService {
     } else {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    console.log(errorMessage);
     return throwError(errorMessage);
   }
 

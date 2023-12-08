@@ -353,7 +353,6 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   refreshForm(id?: string) {
-    console.log(id)
     if (id) {
       this.jobsService.getById(this.id).subscribe((res) => {
         const data = res;

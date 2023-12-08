@@ -12,29 +12,23 @@
         </div>
 
         <ul class="col-12" id="job-list">
-          <li *ngFor="let jobCard of jobs; let i=index" class="job-card new featured">
+          <li *ngFor="let jobCard of jobs" class="job-card new featured">
+            <div class="job-remove" (click)="deleteJob(jobCard.job_id)">×</div>
             <div class="job-card__info">
               <div class="d-md-flex align-items-center job-data">
                 <div class="img-c">
-                  <img [src]="jobCard.image" alt="Company Logo">
+                  <img src="assets/images/default-job.png" alt="Company Logo">
                 </div>
                 <div class="d-flex align-items-center">
-                  <div class="job-details">
-                    <p>{{ jobCard.recruiter }}</p>
-                    <p class="tag-new">New!</p>
-                    <p class="tag-featured">Featured</p>
-                  </div>
-                  <h6>{{ jobCard.title }}</h6>
+                  <h6>{{ jobCard.job_title }}</h6>
                   <ul>
-                    <li>{{ jobCard.duration }}</li>
-                    <li>{{ jobCard.payment }}</li>
-                    <li>{{ jobCard.location }}</li>
+                    <li>{{ jobCard.application_deadline | date:'short' }}</li>
                   </ul>
                 </div>
               </div>
             </div>
             <ul class="job-card__tags">
-              <li *ngFor="let tag of jobCard.tags">{{ tag }}</li>
+              <li [ngClass]="jobCard.status.toLowerCase()">{{ jobCard.status }}</li>
             </ul>
           </li>
         </ul>
