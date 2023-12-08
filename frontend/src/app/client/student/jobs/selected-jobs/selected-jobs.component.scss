@@ -19,11 +19,12 @@
     margin-right: auto;
 
     .jobs-results {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #323838;
       margin-top: 20px;
-      font-size: 24px;
       text-align: center;
-      font-weight: bold;
-      margin-bottom: 20px;
     }
   }
 }
@@ -81,6 +82,18 @@ main {
   justify-content: space-between;
   border-radius: 5px;
   margin-bottom: 20px;
+  position: relative;
+
+  .job-remove {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+    font-size: 32px;
+    color: #939c9b;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
 
   @media(max-width: 767px) {
     display: block;
@@ -215,25 +228,29 @@ main {
     }
 
     li {
-      margin-right: 10px;
-      margin-bottom: 0;
       padding: 7px;
       border-radius: 4px;
-      color: #58a9a7;
       font-weight: 500;
-      background-color: #f1f7f5;
+      color: white;
+      background-color: #58a9a7;
       margin: 5px 10px 5px 0;
       cursor: pointer;
       transition: all ease 0.2s;
+    }
 
-      &:hover {
-        background-color: #58a9a7;
-        color: white;
-      }
+    .waiting {
+      color: white;
+      background-color: orange;
+    }
 
-      &:last-child {
-        margin-right: 0;
-      }
+    .rejected {
+      color: white;
+      background-color: red;
+    }
+
+    .accepted {
+      color: white;
+      background-color: green;
     }
   }
 }

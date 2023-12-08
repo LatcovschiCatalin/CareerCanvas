@@ -17,13 +17,21 @@ export class SelectedJobsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.usersService.get(this.cookieService.get('role')).subscribe((res) => {
-    //   for (let i = 0; i < res.length; i++) {
-    //     if (res[i].email == this.cookieService.get('user')) {
-    //       this.jobs = res[i].jobs;
-    //     }
-    //   }
-    // })
+    this.getData();
+  }
+
+  deleteJob(id: string) {
+    if (window.confirm('Are you sure you want to cancel the application?')) {
+      this.usersService.deleteApply(id).subscribe(()=>{
+        this.getData()
+      })
+    }
+  }
+
+  getData() {
+    this.usersService.studentJobs().subscribe((data: any) => {
+      this.jobs = data;
+    });
   }
 
 }
