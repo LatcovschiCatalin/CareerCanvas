@@ -1,8 +1,11 @@
 <div class="container">
   <app-header></app-header>
-  <div class="row job" *ngIf="jobCard">
+  <div class="row job" *ngIf="!jobCard.error; else noJob">
+    <a href="/">
+      <img class="back" src="https://cdn-icons-png.flaticon.com/512/0/340.png">
+    </a>
     <div class="col-12">
-      <h1 class="job-title">{{ jobCard.title }}</h1>
+      <h1 class="job-title">{{ jobCard.job_title }}</h1>
       <div class="job-details">
         <div class="job-data">
           <div class="img-c">
@@ -16,8 +19,8 @@
           <div class="job-card">
             <div class="job-info">
               <p>{{ jobCard.author.first_name + ' ' + jobCard.author.last_name }}</p>
-              <p class="tag-new">New!</p>
-              <p class="tag-featured">Featured</p>
+              <p class="tag-new" *ngIf="isNewJob(jobCard.created)">New!</p>
+              <p class="tag-featured" *ngIf="jobCard.tags.length >= 3">Featured</p>
             </div>
             <div class="job-info">
               <a [href]="'mailto: ' + jobCard.author.email">{{ jobCard.author.email }}</a>
@@ -25,21 +28,31 @@
             </div>
             <ul class="job-info-list">
               <li>{{ jobCard.application_deadline | date: "short" }}</li>
-              <li>{{ jobCard.salary + ' mdl' }}</li>
+              <li>{{ jobCard.salary }}</li>
               <li>{{ jobCard.location }}</li>
             </ul>
             <ul class="job-card__tags">
-              <li *ngFor="let tag of jobCard.tags">{{ tag }}</li>
+              <li *ngFor="let tag of jobCard.tags">{{ tag.tag_name }}</li>
             </ul>
           </div>
 
         </div>
       </div>
       <div class="job-description">
-        <p>{{ jobCard.description }}</p>
+        <p>{{ jobCard.job_description }}</p>
       </div>
       <button class="apply-button" (click)="apply()">Apply Now</button>
     </div>
   </div>
+  <ng-template #noJob>
+    <div class="job">
+      <a href="/">
+        <img class="back" src="https://cdn-icons-png.flaticon.com/512/0/340.png">
+      </a>
+      <div class="no-job">
+        This Job is not available anymore
+      </div>
+    </div>
+  </ng-template>
   <app-footer></app-footer>
 </div>

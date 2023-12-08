@@ -40,4 +40,11 @@ export class JobDescriptionComponent implements OnInit {
     this.usersService.jobApply(String(this.jobId)).subscribe((res)=>{
     });
   }
+
+  isNewJob(createdTimestamp: number): boolean {
+    const twoHoursAgo = new Date();
+    twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
+
+    return new Date(createdTimestamp) > twoHoursAgo;
+  }
 }
