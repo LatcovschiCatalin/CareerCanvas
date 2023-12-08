@@ -43,17 +43,17 @@ export class JobDescriptionComponent implements OnInit {
     this.usersService.jobApply(String(this.jobId)).subscribe((res)=>{
       if (res.message) {
         this.router.navigate(['./mylist']);
-        this._snackBar.open(res.message, '200', {
+        this._snackBar.open(res.message, '', {
           horizontalPosition: 'end',
-          verticalPosition: 'top',
+          verticalPosition: 'bottom',
           duration: 5000,
           panelClass: 'success'
         })
       } else {
         this.router.navigate(['']);
-        this._snackBar.open(res.error, '400', {
+        this._snackBar.open(res.error, '', {
           horizontalPosition: 'end',
-          verticalPosition: 'top',
+          verticalPosition: 'bottom',
           duration: 5000,
           panelClass: 'error'
         })
