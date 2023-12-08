@@ -15,7 +15,7 @@ export class JobsListComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef, private jobsService: JobsService, private usersService: UsersService, private cookieService: CookieService) {
   }
 
-  filterTags: string[] = [];
+  filterTags: any[] = [];
 
   closeFilterTag(tag: string): void {
     const index = this.filterTags.indexOf(tag);
@@ -33,15 +33,15 @@ export class JobsListComponent implements OnInit {
     this.filteredData = this.jobs;
   }
 
-  addFilterTag(tag: string, event: Event): void {
+  addFilterTag(tag: any, event: Event): void {
     event.stopPropagation();
+
     if (this.filterTags.indexOf(tag) === -1) {
       this.filterTags.push(tag);
     }
 
-    this.filteredData = this.jobs.filter((job) => {
-      return this.filterTags.every((filterTag) => job.tags.includes(filterTag));
-    });
+    this.filteredData = this.jobs.filter((job) =>
+      job.tags.some((jobTag: any) => jobTag.tag_name === tag.tag_name))
   }
 
 
@@ -57,7 +57,7 @@ export class JobsListComponent implements OnInit {
     this.getJobs();
   }
 
-  changePage(e: any){
+  changePage(e: any) {
     this.currentPage = e.pageIndex + 1;
     this.getJobs();
   }
@@ -70,21 +70,8 @@ export class JobsListComponent implements OnInit {
       this.totalPages = res.total_pages;
       this.jobs = res.data;
 
-      // Call a function to set tags from job titles
-      this.setTagsFromTitles();
-
       this.filteredData = this.jobs;
     })
-  }
-
-  // Function to extract tags from job titles and update the 'tags' field
-  setTagsFromTitles() {
-    this.jobs.forEach((job) => {
-      // Extract tags from the job title (you can customize this part based on your data)
-      const title = job.job_title;
-      const tags = title.split(' '); // Split the title into words
-      job.tags = tags;
-    });
   }
 
   search() {
@@ -96,5 +83,12 @@ export class JobsListComponent implements OnInit {
         return false;
       });
     });
+  }
+
+  isNewJob(createdTimestamp: number): boolean {
+    const twoHoursAgo = new Date();
+    twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
+
+    return new Date(createdTimestamp) > twoHoursAgo;
   }
 }

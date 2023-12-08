@@ -9,7 +9,7 @@
 
       <div class="filter-tags-c" *ngIf="filterTags.length">
         <ul id="filter-tags-list" class="job-card__tags">
-          <li class="tag" *ngFor="let tag of filterTags" (click)="closeFilterTag(tag)">{{ tag }} <span
+          <li class="tag" *ngFor="let tag of filterTags" (click)="closeFilterTag(tag)">{{ tag.tag_name }} <span
             class="close-span">×</span></li>
         </ul>
         <p class="clear-tags" id="js-clear-tags" (click)="clearFilterTags()">Clear</p>
@@ -37,8 +37,8 @@
             <div class="d-flex align-items-center">
               <div class="job-details">
                 <p>{{ jobCard.created | date: "short" }}</p>
-                <p class="tag-new">New!</p>
-                <p class="tag-featured">Featured</p>
+                <p class="tag-new" *ngIf="isNewJob(jobCard.created)">New!</p>
+                <p class="tag-featured" *ngIf="jobCard.tags.length >= 3">Featured</p>
               </div>
               <h6>{{ jobCard.job_title }}</h6>
               <ul>
@@ -50,7 +50,7 @@
           </div>
         </div>
         <ul class="job-card__tags">
-          <li *ngFor="let tag of jobCard.tags" (click)="addFilterTag(tag, $event)">{{ tag }}</li>
+          <li *ngFor="let tag of jobCard.tags" (click)="addFilterTag(tag, $event)">{{ tag.tag_name }}</li>
         </ul>
       </li>
     </ul>
