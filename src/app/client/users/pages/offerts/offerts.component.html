@@ -13,11 +13,11 @@
             <div class="job-card__info">
               <div class="d-md-flex align-items-center job-data">
                 <div class="img-c">
-                  <ng-container *ngIf="user.avatar; else noAvatar">
-                    <img [src]="user.avatar">
+                  <ng-container *ngIf="user.avatar; else noImage">
+                    <img [src]="getImageUrl(user.avatar)" alt="Company Logo">
                   </ng-container>
-                  <ng-template #noAvatar>
-                    <img src="https://assets.moxfield.net/assets/images/no-user-found.png" alt="Company Logo">
+                  <ng-template #noImage>
+                    <img src="https://assets.moxfield.net/assets/images/no-user-found.png" alt="avatar">
                   </ng-template>
                 </div>
                 <div class="d-flex align-items-center">
