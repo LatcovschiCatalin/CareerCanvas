@@ -2,6 +2,8 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {AuthService} from "../../auth/auth.service";
 import {UsersService} from "../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
+import * as base64js from 'base64-js';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +20,7 @@ export class NavbarComponent implements OnInit {
 
   user: any;
 
-  constructor(private authService: AuthService, private usersService: UsersService, private cookieService: CookieService) {
+  constructor(private sanitizer: DomSanitizer, private authService: AuthService, private usersService: UsersService, private cookieService: CookieService) {
   }
 
   ngOnInit(): void {
@@ -34,4 +36,11 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  getImageUrl(base64: any): SafeUrl {
+    const byteArray = base64js.toByteArray(base64);
+    const blob = new Blob([byteArray], {type: 'image/jpeg'}); // Adjust the MIME type as per your image type
+    const imageUrl = URL.createObjectURL(blob);
+
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+  }
 }
