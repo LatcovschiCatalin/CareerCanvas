@@ -10,22 +10,21 @@ import {AuthService} from '../../auth/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
-  user = {
-    "first_name": '',
-    "last_name": ''
-  }
+  user: any;
 
   constructor(private usersService: UsersService, private authService: AuthService, private cookieService: CookieService) {
   }
 
   ngOnInit(): void {
     this.usersService.userInfo().subscribe((res) => {
-     this.user = res;
+      this.user = res;
     })
   }
 
   logout() {
-    this.authService.logout();
+    if (window.confirm('Are you sure you want to log out?')) {
+      return this.authService.logout();
+    }
   }
 
 }
