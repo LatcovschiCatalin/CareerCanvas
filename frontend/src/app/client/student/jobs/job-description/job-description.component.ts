@@ -38,7 +38,6 @@ export class JobDescriptionComponent implements OnInit {
 
   apply() {
     this.usersService.jobApply(String(this.jobId)).subscribe((res)=>{
-      console.log(res)
     });
   }
 }

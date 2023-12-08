@@ -1,23 +1,37 @@
 <div class="details">
-  <div class="item" *ngFor="let key of keys">
-    <div class="values" *ngIf="key != 'id'">
-      <div class="title">
-        {{key}}:
-      </div>
-      <div class="value">
-        <div>
-          <a *ngIf="key == 'email' || key == 'phone'; else noLink"
-             [href]="key == 'email' ? 'mailto:' + data[key] : 'tel:'+data[key]">
-            {{data[key]}}
-          </a>
-          <ng-template #noLink>
-            {{data[key]}}
-          </ng-template>
+  <ng-container *ngFor="let key of keys; let i=index">
+    <div class="item" *ngIf="data[key] && data[key].length !== 0">
+      <div class="values" *ngIf="key !== 'id'">
+        <div class="title">
+          {{values[i]}}
         </div>
-
+        <div class="value" [ngSwitch]="key">
+          <a *ngSwitchCase="'job_email'" [href]="'mailto:' + data[key]">
+            {{ data[key] }}
+          </a>
+          <a *ngSwitchCase="'job_phone'" [href]="'tel:' + data[key]">
+            {{ data[key] }}
+          </a>
+          <img *ngSwitchCase="'image'" [src]="data[key]">
+          <div *ngSwitchCase="'application_deadline' || 'created'">
+            {{ data[key] | date: 'short' }}
+          </div>
+          <div *ngSwitchCase="'created'">
+            {{ data[key] | date: 'short' }}
+          </div>
+          <div *ngSwitchCase="'author'">
+            {{ data[key].first_name + ' ' + data[key].last_name }}
+          </div>
+          <div *ngSwitchCase="'tags'">
+            {{ data[key].toString() }}
+          </div>
+          <div *ngSwitchDefault>
+            {{ data[key] }}
+          </div>
+        </div>
       </div>
-      <br>
     </div>
-  </div>
-  <div class="button" (click)="back()">Go Back</div>
+  </ng-container>
 </div>
+
+<div class="back" (click)="back()">Go Back</div>

@@ -11,7 +11,8 @@ export class ViewDetailsComponent implements OnInit {
   id: any;
   data: any;
   tab = 'recruiter';
-  keys = [];
+  keys!: string[];
+  values!: string[];
 
   constructor(private router: Router, private service: JobsService) {
     let routes = this.router.url.split('/');
@@ -19,17 +20,21 @@ export class ViewDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('1234')
     this.service.getById(this.id).subscribe((res) => {
-      this.data = res;
-      console.log(this.data)
-      // @ts-ignore
+      this.data = {
+        ...res,
+        tags: res.tags ? res.tags.map((tag: any) => tag.tag_name) : []
+      };
+
       this.keys = Object.keys(this.data);
-    })
+      this.values = this.keys.map((key) => key.replace('_', ' '));
+    });
   }
 
-  back() {
-    this.router.navigate(['']);
-  }
+
+back()
+{
+  this.router.navigate(['./recruiter']);
+}
 
 }

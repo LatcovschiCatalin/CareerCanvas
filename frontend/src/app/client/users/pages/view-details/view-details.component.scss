@@ -4,6 +4,15 @@
   animation: fadeInAnimation ease 2s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  .item {
+    border: 1px solid #fff;
+    border-radius: 10px;
+    padding: 15px;
+  }
 
   .title {
     font-size: 21px;
@@ -11,19 +20,34 @@
     text-transform: capitalize;
   }
 
-  .value {
+  .value, a {
     font-size: 18px;
-    margin-top: 7px;
-    color: $active;
-    margin-left: 20px;
+    margin-top: 11px;
+    color: #9ca3af;
   }
 
-  .button {
-    margin: 0;
-    width: fit-content;
-    min-width: 150px;
-    text-align: center;
+  a {
+    cursor: pointer;
+    text-decoration: none;
   }
+}
+
+.back {
+  cursor: pointer;
+  border: 1px solid $text;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 21px;
+  color: $text;
+  width: fit-content;
+  min-width: 150px;
+  text-align: center;
+  margin: 30px 0 0;
+}
+
+img {
+  height: 200px;
+  width: 100%;
 }
 
 @keyframes fadeInAnimation {
