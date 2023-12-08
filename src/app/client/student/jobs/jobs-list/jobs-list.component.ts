@@ -3,6 +3,8 @@ import {JobsService} from "../../../../server/jobs/jobs.service";
 import {UsersService} from "../../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
 import {HttpParams} from '@angular/common/http';
+import * as base64js from 'base64-js';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-jobs-list',
@@ -12,7 +14,7 @@ import {HttpParams} from '@angular/common/http';
 export class JobsListComponent implements OnInit {
 
 
-  constructor(private cdr: ChangeDetectorRef, private jobsService: JobsService, private usersService: UsersService, private cookieService: CookieService) {
+  constructor(private sanitizer: DomSanitizer, private cdr: ChangeDetectorRef, private jobsService: JobsService, private usersService: UsersService, private cookieService: CookieService) {
   }
 
   filterTags: any[] = [];
@@ -90,5 +92,13 @@ export class JobsListComponent implements OnInit {
     twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
 
     return new Date(createdTimestamp) > twoHoursAgo;
+  }
+
+  getImageUrl(base64: any): SafeUrl {
+    const byteArray = base64js.toByteArray(base64);
+    const blob = new Blob([byteArray], { type: 'image/jpeg' }); // Adjust the MIME type as per your image type
+    const imageUrl = URL.createObjectURL(blob);
+
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
   }
 }

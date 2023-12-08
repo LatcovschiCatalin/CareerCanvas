@@ -1,7 +1,7 @@
 <div class="details">
   <ng-container *ngFor="let key of keys; let i=index">
-    <div class="item" *ngIf="data[key] && data[key].length !== 0">
-      <div class="values" *ngIf="key !== 'id'">
+    <div class="item" *ngIf="data[key] && data[key].length !== 0 && (key !== 'job_id' && key !== 'user_id')">
+      <div class="values">
         <div class="title">
           {{values[i]}}
         </div>
@@ -12,7 +12,15 @@
           <a *ngSwitchCase="'job_phone'" [href]="'tel:' + data[key]">
             {{ data[key] }}
           </a>
-          <img *ngSwitchCase="'image'" [src]="data[key]">
+          <div *ngSwitchCase="'image'">
+            <ng-container *ngIf="data[key]; else noImage">
+              <img [src]="getImageUrl(data[key])" alt="image">
+            </ng-container>
+            <ng-template #noImage>
+              <img src="assets/images/default-job.png">
+            </ng-template>
+          </div>
+
           <div *ngSwitchCase="'application_deadline' || 'created'">
             {{ data[key] | date: 'short' }}
           </div>

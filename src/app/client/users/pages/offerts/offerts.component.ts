@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {UsersService} from "../../../../server/users/users.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import * as base64js from 'base64-js';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-offerts',
@@ -13,7 +15,7 @@ export class OffertsComponent implements OnInit {
   id: any;
   users: any;
 
-  constructor(private router: Router, private service: UsersService,     private snackBar: MatSnackBar) {
+  constructor(private sanitizer: DomSanitizer, private router: Router, private service: UsersService,     private snackBar: MatSnackBar) {
     let routes = this.router.url.split('/');
     this.id = routes[routes.length - 1];
   }
@@ -74,5 +76,13 @@ export class OffertsComponent implements OnInit {
     }
 
     return age;
+  }
+
+  getImageUrl(base64: any): SafeUrl {
+    const byteArray = base64js.toByteArray(base64);
+    const blob = new Blob([byteArray], { type: 'image/jpeg' }); // Adjust the MIME type as per your image type
+    const imageUrl = URL.createObjectURL(blob);
+
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
   }
 }
