@@ -3,8 +3,6 @@ import {Jobs} from "../../../../server/jobs/jobs";
 import {JobsService} from "../../../../server/jobs/jobs.service";
 import {UsersService} from "../../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
-import * as base64js from 'base64-js';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-selected-jobs',
@@ -15,7 +13,7 @@ export class SelectedJobsComponent implements OnInit {
 
   jobs: any[] = []
 
-  constructor(private sanitizer: DomSanitizer, private usersService: UsersService, private cookieService: CookieService) {
+  constructor(private usersService: UsersService, private cookieService: CookieService) {
   }
 
   ngOnInit(): void {
@@ -24,7 +22,7 @@ export class SelectedJobsComponent implements OnInit {
 
   deleteJob(id: string) {
     if (window.confirm('Are you sure you want to cancel the application?')) {
-      this.usersService.deleteApply(id).subscribe(()=>{
+      this.usersService.deleteApply(id).subscribe(() => {
         this.getData()
       })
     }
@@ -35,13 +33,4 @@ export class SelectedJobsComponent implements OnInit {
       this.jobs = data;
     });
   }
-
-  getImageUrl(base64: any): SafeUrl {
-    const byteArray = base64js.toByteArray(base64);
-    const blob = new Blob([byteArray], { type: 'image/jpeg' }); // Adjust the MIME type as per your image type
-    const imageUrl = URL.createObjectURL(blob);
-
-    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
-  }
-
 }

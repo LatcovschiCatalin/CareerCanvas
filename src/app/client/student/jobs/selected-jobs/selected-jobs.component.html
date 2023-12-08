@@ -16,14 +16,6 @@
             <div class="job-remove" (click)="deleteJob(jobCard.job_id)">×</div>
             <div class="job-card__info">
               <div class="d-md-flex align-items-center job-data">
-                <div class="img-c">
-                  <ng-container *ngIf="jobCard.image; else noImage">
-                    <img [src]="getImageUrl(jobCard.image)" alt="Company Logo">
-                  </ng-container>
-                  <ng-template #noImage>
-                    <img src="assets/images/default-job.png" alt="Company Logo">
-                  </ng-template>
-                </div>
                 <div class="d-flex align-items-center">
                   <h6>{{ jobCard.job_title }}</h6>
                   <ul>
