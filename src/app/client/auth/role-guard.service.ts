@@ -26,12 +26,6 @@ export class RoleGuard implements CanActivate {
         }
 
         if (!roles.length) {
-          this._snackBar.open('You have no roles to access this route!', '401', {
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-            duration: 5000,
-            panelClass: 'error'
-          })
           this.router.navigate(['auth/login']);
 
           return of(false);
@@ -45,44 +39,16 @@ export class RoleGuard implements CanActivate {
           })
 
           if (!allRolesEligible) {
-            this._snackBar.open('You have no roles to access this route!', '401', {
-              horizontalPosition: 'end',
-              verticalPosition: 'top',
-              duration: 5000,
-              panelClass: 'error'
-            })
             this.router.navigate(['auth/login']);
           }
 
           return of(allRolesEligible)
         }
       } else {
-        this._snackBar.open('You have no roles to access this route!', '401', {
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          duration: 5000,
-          panelClass: 'error'
-        })
         this.router.navigate(['auth/login']);
         return of(false);
       }
     } else {
-      this
-        ._snackBar
-        .open(
-          'You have no roles to access this route!'
-          ,
-          '401'
-          , {
-            horizontalPosition: 'end'
-            ,
-            verticalPosition: 'top'
-            ,
-            duration: 5000
-            ,
-            panelClass: 'error'
-          }
-        )
       this.router.navigate(['auth/login']);
 
       return of(false);
