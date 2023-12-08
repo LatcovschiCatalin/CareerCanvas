@@ -1,17 +1,31 @@
 .container {
   background-color: whitesmoke;
   padding: 0px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
 }
 
-.job-title {
+.back {
+  width: 48px;
+  margin-bottom: 20px;
+}
+
+.job-title, .no-job {
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 30px;
   color: #323838;
 }
 
+.job-title {
+  text-align: center;
+}
+
 .job {
-  padding: 30px 70px;
+  padding: 50px;
+  flex: 1 1 100%;
 }
 
 .job-details {
@@ -134,16 +148,10 @@
     margin-bottom: 10px;
     padding: 6px 14px;
     border-radius: 8px;
-    color: #58a9a7;
+    color: #fff;
     font-weight: 700;
-    background-color: #f1f7f5;
-    cursor: pointer;
+    background-color: #58a9a7;
     transition: all 0.3s ease;
-
-    &:hover {
-      background-color: #58a9a7;
-      color: white;
-    }
   }
 }
 
