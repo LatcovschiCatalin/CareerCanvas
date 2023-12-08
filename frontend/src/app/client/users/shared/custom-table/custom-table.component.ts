@@ -298,7 +298,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
         break;
       }
       case 'view': {
-        this.router.navigate(['/details/' + id]);
+        this.router.navigate(['./recruiter/details/' + id]);
         break;
       }
     }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ViewDetailsRoutingModule } from './view-details-routing.module';
 import { ViewDetailsComponent } from './view-details.component';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -11,7 +12,9 @@ import { ViewDetailsComponent } from './view-details.component';
   ],
   imports: [
     CommonModule,
-    ViewDetailsRoutingModule
-  ]
+    ViewDetailsRoutingModule,
+    DatePipe
+  ],
+  providers: []
 })
 export class ViewDetailsModule { }
