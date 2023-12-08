@@ -40,6 +40,18 @@ export class UsersService {
       );
   }
 
+  changeStatus(data: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('student_id', data.student_id);
+    formData.append('job_id', data.job_id);
+    formData.append('status', data.status);
+
+    return this.httpClient.put(this.apiServer + '/users/changestatus', formData, this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+      );
+  }
+
 
   login(credentials: any): Observable<any> {
     const formData = new FormData();
@@ -60,8 +72,6 @@ export class UsersService {
   }
 
   userInfo(): Observable<any> {
-    const formData = new FormData();
-    formData.append('avaar', '');
     return this.httpClient.get<any>(this.apiServer + '/users/getinfo', this.httpOptions)
       .pipe(
         catchError(this.errorHandler)
@@ -99,6 +109,15 @@ export class UsersService {
       .pipe(
         catchError(this.errorHandler)
       )
+  }
+
+  getAppliedStudents(job_id: any): Observable<any> {
+    const params = new HttpParams().set('job_id', job_id);
+
+    return this.httpClient.get<any>(this.apiServer + '/users/getstudents', { params, headers: this.httpOptions.headers})
+      .pipe(
+        catchError(this.errorHandler)
+      );
   }
 
   getById(id: any, tab: String): Observable<Users> {

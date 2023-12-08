@@ -1,34 +1,50 @@
 <div class="container">
-  <app-navbar></app-navbar>
   <div class="content">
     <div class="list">
       <div class="jobs-list">
 
-        <a href="/recruiter">
-          <img class="back" src="https://cdn-icons-png.flaticon.com/512/0/340.png">
-        </a>
+        <div class="back" (click)="back()">Go Back</div>
         <div class="jobs-results">
-          Offers
+          Applications
         </div>
 
-<!--        <div class="jobs">-->
-<!--          <div class="job">-->
-<!--            <div class="image">-->
-<!--              {{jobs["name"]}}      {{jobs["surname"]}}-->
-<!--            </div>-->
-<!--            <div class="details">-->
-<!--              <div class="benefits">-->
-<!--                {{jobs.phone}}-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="titles" *ngFor="let j of jobs['jobs']">-->
-<!--              {{j.title}}-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <ul class="col-12" id="job-list">
+          <li *ngFor="let user of users" class="job-card new featured">
+            <div class="job-card__info">
+              <div class="d-md-flex align-items-center job-data">
+                <div class="img-c">
+                  <ng-container *ngIf="user.avatar; else noAvatar">
+                    <img [src]="user.avatar">
+                  </ng-container>
+                  <ng-template #noAvatar>
+                    <img src="https://assets.moxfield.net/assets/images/no-user-found.png" alt="Company Logo">
+                  </ng-template>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div [ngClass]="user.status.toLowerCase()">{{ user.status }}</div>
+                  <h6>{{ user.first_name + ' ' + user.last_name }}</h6>
+                  <div class="contact">
+                    <a [href]="'mailto:' + user.email">{{user.email}}</a>
+                    <a [href]="'tel:' + user.phone">{{user.phone}}</a>
+                  </div>
+                  <div class="skills">
+                    Skills: {{user.skills}}
+                  </div>
+                  <ul>
+                    <li>{{ calculateAge(user.date_of_birth) + ' years old' }}</li>
+                    <li>{{ user.gender }}</li>
+                    <li>{{ user.address }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="job-approvement" *ngIf="user.status.toLowerCase() === 'waiting'">
+              <button class="button approve" (click)="changeStatus('accepted', user.user_id)">Accepted</button>
+              <div class="button reject" (click)="changeStatus('rejected', user.user_id)">Reject</div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-  <app-footer></app-footer>
 </div>
-
