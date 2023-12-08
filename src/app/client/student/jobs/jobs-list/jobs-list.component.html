@@ -13,8 +13,8 @@
     <div class="col-12">
       <div class="search-engine">
         <img src="https://static.vecteezy.com/system/resources/previews/001/504/972/non_2x/search-icon-free-vector.jpg">
-        <input type="text" placeholder="Search job title or keyword" [(ngModel)]="searchValue" (keydown.enter)=search()>
-        <button class="search" (click)="search()">Find jobs</button>
+        <input type="text" placeholder="Search job title or keyword" [(ngModel)]="searchValue" (keydown.enter)=filterData()>
+        <button class="search" (click)="filterData()">Find jobs</button>
       </div>
 
       <div class="filter-tags-c" *ngIf="filterTags.length">
@@ -67,7 +67,7 @@
   </div>
 
   <div class="row">
-    <mat-paginator [length]="(totalPages-1) * limit + filteredData.length"
+    <mat-paginator [length]="total"
                    [pageSize]="limit"
                    [pageIndex]="currentPage - 1"
                    (page)="changePage($event)"
