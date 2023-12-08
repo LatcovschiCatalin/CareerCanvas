@@ -54,17 +54,20 @@ export class TableComponent implements OnInit {
     this.actions = [
       {
         key: 'edit',
-        name: 'Edit'
+        icon: '/assets/icons/dark/edit.png'
       },
       {
         key: 'view',
-        name: 'View'
+        icon: '/assets/icons/dark/view.svg'
       },
       {
         key: 'delete',
-        name: 'Delete'
+        icon: '/assets/icons/dark/trash.png'
       },
-
+      {
+        key: 'offers',
+        icon: '/assets/icons/dark/notification.svg'
+      },
     ]
   }
 
