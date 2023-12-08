@@ -1,4 +1,3 @@
-
 .container{
   padding: 0 !important;
 }
@@ -36,6 +35,29 @@
   }
 
 }
+
+.bg {
+  background: whitesmoke;
+  padding: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .ftitle {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .stitle {
+    font-size: 14px;
+  }
+
+  img {
+    width: 250px;
+  }
+}
+
 
 .jobs-results {
   font-size: 18px;
