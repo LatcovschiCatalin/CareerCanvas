@@ -3,7 +3,7 @@
 <br/>
 <div align="center">
   <a href="https://github.com/LatcovschiCatalin/CareerCanvas">
-    <img src=".\frontend\src\assets\icons\min-logo.jpg" alt="Logo" width="80" height="80">
+    <img src=".\src\assets\icons\min-logo.jpg" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">TagJob</h3>
@@ -11,7 +11,7 @@
   <p align="center">
     Giving students the opportunity to make some quick money
     <br />
-    <a href="https://github.com/LatcovschiCatalin/CareerCanvas">View Demo</a>
+    <a href="https://tagjob.netlify.app/">View Demo</a>
     <br />
   </p>
 </div>
