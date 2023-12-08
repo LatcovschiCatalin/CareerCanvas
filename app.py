@@ -49,13 +49,34 @@ import mysql.connector.pooling
 
 from mysql.connector import pooling
 
-connection_pool = pooling.MySQLConnectionPool(pool_name="pynative_pool",
-                                                  pool_size=32,
-                                                  pool_reset_session=True,
-                                                  host='localhost',
-                                                  database='jobrapid',
-                                                  user='root',
-                                                  password='radu')
+production = False
+
+if production is False:
+    connection_pool = pooling.MySQLConnectionPool(pool_name="pynative_pool",
+        pool_size=32,
+        pool_reset_session=True,
+        host='localhost',
+        database='jobrapid',
+        user='root',
+        password='radu')
+else:
+    db_host = os.getenv("DB_HOST")
+    db_user = os.getenv("DB_USER")
+    db_password = os.getenv("DB_PASSWORD")
+    db_port = os.getenv("DB_PORT")
+    db_name = os.getenv("DB_NAME")
+
+    connection_pool = pooling.MySQLConnectionPool(
+        pool_name="pynative_pool",
+        pool_size=32,
+        pool_reset_session=True,
+        host=db_host,
+        database=db_name,
+        user=db_user,
+        password=db_password,
+        port=int(db_port),
+    )
+
 
 app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
 jwt = JWTManager(app)
@@ -94,7 +115,8 @@ def get_info_handler():
     response = get_info(connection_pool, response["id"])
     if(response == None or response == "NULL"):
         return response
-    response["avatar"] = encode_image_as_base64("uploads/"+response["avatar"])
+    if not(response['avatar'] is None or response['avatar'] == "NULL"):
+        response['avatar'] = encode_image_as_base64("uploads/"+response["avatar"])
     return response
 
 @app.route("/api/users/getinfobyid", methods=['GET'])
@@ -243,7 +265,7 @@ def create_job():
         return handle_bad_request(f"Error creating job: {err}")
 
 # GET: Retrieve all jobs
-# http://127.0.0.1:5000/api/jobs/page?criteria=created&order=ASC&page_num=1&job_title=Dog
+# http://127.0.0.1:5000/api/jobs/page?criteria=created&order=ASC&job_title=&tag_id=
 @app.route("/api/jobs/page", methods=["GET"])
 def get_jobs():
     try:
