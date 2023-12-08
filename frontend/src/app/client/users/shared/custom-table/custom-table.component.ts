@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewEncapsulation,} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {QueryParamsService} from "../../../services/query-params.service";
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -141,13 +141,14 @@ export class CustomTableComponent implements OnInit, OnDestroy {
 
   mode = ''
 
-  constructor(private snackBar: MatSnackBar, private router: Router, private jobsService: JobsService, private formBuilder: FormBuilder, private qpService: QueryParamsService, private route: ActivatedRoute, private cookieService: CookieService, private usersService: UsersService) {}
+  constructor(private snackBar: MatSnackBar, private router: Router, private jobsService: JobsService, private formBuilder: FormBuilder, private qpService: QueryParamsService, private route: ActivatedRoute, private cookieService: CookieService, private usersService: UsersService) {
+  }
 
   ngOnInit(): void {
-    this.usersService.userInfo().subscribe((user)=>{
+    this.usersService.userInfo().subscribe((user) => {
       this.user = user;
     })
-    this.jobsService.getTags().subscribe((tags)=>{
+    this.jobsService.getTags().subscribe((tags) => {
       this.tags = tags;
     })
     this.mode = this.cookieService.get('mode') || 'dark';
@@ -267,7 +268,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     })
   }
 
-  onAction(key: any, id?: any) {
+  onAction(key: any, id?: any, submit?: boolean) {
     switch (key.toLowerCase()) {
       case 'delete': {
         this.onDelete(id);
@@ -287,14 +288,13 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       case 'edit': {
         this.add = false;
         this.id = id;
-        this.refreshForm();
+        if (submit) {
+          this.submit();
+        } else {
+          this.scrollToTop();
+          this.refreshForm(id);
+        }
         this.qpService.updateParam('id', id);
-        break;
-      }
-      case 'save': {
-        this.submit();
-        this.qpService.deleteParam('id');
-        this.id = '-1';
         break;
       }
       case 'view': {
@@ -322,7 +322,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
         image: formValues.image,
       };
 
-      if (this.id !== '-1') {
+      if (this.id && this.id !== '-1') {
         this.jobsService.put(jobData, this.id).subscribe(() => {
           this.getData();
           this.refreshForm();
@@ -352,16 +352,17 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  refreshForm() {
-    if (this.id !== '-1') {
+  refreshForm(id?: string) {
+    console.log(id)
+    if (id) {
       this.jobsService.getById(this.id).subscribe((res) => {
         const data = res;
         this.customForm.patchValue({
-          job_title: data.title,
-          job_description: data.description,
+          job_title: data.job_title,
+          job_description: data.job_description,
           location: data.location,
           salary: data.salary,
-          application_deadline: data.application_deadline,
+          application_deadline: this.formatDate(data.application_deadline),
           job_email: data.job_email,
           job_phone: data.job_phone,
           tags: data.tags,
@@ -384,7 +385,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   onFileSelected(e: any) {
-    const file:File = e.target.files[0];
+    const file: File = e.target.files[0];
     this.customForm.patchValue({
       ...this.customForm.value,
       image: file
@@ -402,6 +403,24 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     //   tags: tags.length > 0 ? tags : null
     // });
   }
+
+  formatDate(dateString: string) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  scrollToTop() {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
   ngOnDestroy() {
     this.observables.forEach(obs => {
       obs.unsubscribe();

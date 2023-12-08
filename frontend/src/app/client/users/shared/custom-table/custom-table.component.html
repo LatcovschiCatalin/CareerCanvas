@@ -2,7 +2,7 @@
 <div class="item-content">
   <div class="header">
     <div class="form">
-      <form [formGroup]="customForm" *ngIf="add" class="add">
+      <form [formGroup]="customForm" *ngIf="add || id !== '-1'" class="add">
 
         <div class="form-control" *ngFor="let item of formData; let i=index;"
              [ngClass]="{'invalid': customForm.get(item.key)?.invalid && (customForm.get(item.key)?.dirty || customForm.get(item.key)?.touched)}">
@@ -55,7 +55,13 @@
       </form>
 
     </div>
-    <div class="button" (click)="onAction('add')">Add</div>
+    <ng-container *ngIf="id !== '-1'; else addJob">
+      <div class="button" (click)="onAction('edit', id, true)">Edit</div>
+    </ng-container>
+
+    <ng-template #addJob>
+      <div class="button" (click)="onAction('add')">Add</div>
+    </ng-template>
 
   </div>
   <div class="smart-table">
@@ -107,42 +113,15 @@
           <td mat-cell *matCellDef="let el"
               [ngStyle]="{width:fieldWidth + 'px'}"
           >
-
-            <div class="input" *ngIf="el.id == this.id && column.key != 'id'; else normal">
-              <form [formGroup]="customForm" class="form">
-
-                <div class="form-control"
-                     [ngClass]="{'invalid': customForm.get(column.key)?.invalid && (customForm.get(column.key)?.dirty || customForm.get(column.key)?.touched)}">
-                  <input class="custom-input"
-                         [type]="column.key == 'password' ? 'password' : 'text'"
-                         [formControlName]="column.key"
-                         [placeholder]="'type ' + column.key"
-                  />
-                  <div
-                    *ngIf="customForm.get(column.key)?.invalid && (customForm.get(column.key)?.dirty || customForm.get(column.key)?.touched)"
-                    class="errors">
-                    <div class="error">
-                      <div *ngIf="customForm.get(column.key)?.errors?.[validators['required'].type]">
-                        {{validators['required'].message}}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-
+            <div>
+              <a *ngIf="column.key == 'email' || column.key == 'phone'; else noLink"
+                 [href]="column.key == 'email' ? 'mailto:' + el[column.key] : 'tel:'+el[column.key]">
+                {{ el[column.key] }}
+              </a>
+              <ng-template #noLink>
+                {{ el[column.key] }}
+              </ng-template>
             </div>
-            <ng-template #normal>
-              <div>
-                <a *ngIf="column.key == 'email' || column.key == 'phone'; else noLink"
-                   [href]="column.key == 'email' ? 'mailto:' + el[column.key] : 'tel:'+el[column.key]">
-                  {{ el[column.key] }}
-                </a>
-                <ng-template #noLink>
-                  {{ el[column.key] }}
-                </ng-template>
-              </div>
-            </ng-template>
-
 
           </td>
         </ng-container>
@@ -154,8 +133,8 @@
           <td mat-cell *matCellDef="let el">
             <div class="actions">
               <div class="button"
-                   (click)="onAction(el.job_id == id && action.key == 'edit' ? 'save' : action.key, el.job_id)"
-                   *ngFor="let action of tableConfig?.actions">{{el.job_id == id && action.key == 'edit' ? 'Save' : action['name']}}</div>
+                   (click)="onAction('edit', el.job_id)"
+                   *ngFor="let action of tableConfig?.actions">{{action['name']}}</div>
             </div>
           </td>
         </ng-container>

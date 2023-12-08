@@ -77,18 +77,23 @@ export class JobsService {
   }
 
   put(job: any, job_id: any): Observable<any> {
+    const date = job.application_deadline.split('-');
+    const day = date[2];
+    const month =  date[1];
+    const year =  date[0];
+
     const formData = new FormData();
     formData.append('job_title', job.job_title);
     formData.append('job_description', job.job_description);
     formData.append('location', job.location);
     formData.append('salary', job.salary);
-    formData.append('application_deadline', job.application_deadline);
+    formData.append('application_deadline', `${day}-${month}-${year}`);
     formData.append('job_email', job.job_email);
     formData.append('job_phone', job.job_phone);
     formData.append('tags', job.tags);
     formData.append('image', job.image);
     const params = new HttpParams().set('job_id', job_id);
-    return this.httpClient.put<Jobs>(this.apiServer + `/jobs/`, formData, { params, headers: this.httpOptions.headers })
+    return this.httpClient.put<Jobs>(this.apiServer + `/jobs/put`, formData, { params, headers: this.httpOptions.headers })
       .pipe(
         catchError(this.errorHandler)
       )
