@@ -7,28 +7,35 @@
         <a href="/">
           <img class="back" src="https://cdn-icons-png.flaticon.com/512/0/340.png">
         </a>
-        <div class="jobs-results">
-          My applied Jobs
-        </div>
+        <ng-container *ngIf="jobs.length > 0; else empty">
+          <div class="jobs-results">
+            My applied Jobs
+          </div>
 
-        <ul class="col-12" id="job-list">
-          <li *ngFor="let jobCard of jobs" class="job-card new featured">
-            <div class="job-remove" (click)="deleteJob(jobCard.job_id)">×</div>
-            <div class="job-card__info">
-              <div class="d-md-flex align-items-center job-data">
-                <div class="d-flex align-items-center">
-                  <h6>{{ jobCard.job_title }}</h6>
-                  <ul>
-                    <li>{{ jobCard.application_deadline | date:'short' }}</li>
-                  </ul>
+          <ul class="col-12" id="job-list">
+            <li *ngFor="let jobCard of jobs" class="job-card new featured">
+              <div class="job-remove" (click)="deleteJob(jobCard.job_id)">×</div>
+              <div class="job-card__info">
+                <div class="d-md-flex align-items-center job-data">
+                  <div class="d-flex align-items-center">
+                    <h6>{{ jobCard.job_title }}</h6>
+                    <ul>
+                      <li>{{ jobCard.application_deadline | date:'short' }}</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-            <ul class="job-card__tags">
-              <li [ngClass]="jobCard.status.toLowerCase()">{{ jobCard.status }}</li>
-            </ul>
-          </li>
-        </ul>
+              <ul class="job-card__tags">
+                <li [ngClass]="jobCard.status.toLowerCase()">{{ jobCard.status }}</li>
+              </ul>
+            </li>
+          </ul>
+        </ng-container>
+        <ng-template #empty>
+          <div class="no-results">
+            Sorry, You don't have any job selected
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>
