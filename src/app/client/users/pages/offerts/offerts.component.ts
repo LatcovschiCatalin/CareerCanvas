@@ -39,7 +39,7 @@ export class OffertsComponent implements OnInit {
       if (res.message) {
         this.snackBar.open(res.message, '', {
           horizontalPosition: 'end',
-          verticalPosition: 'top',
+          verticalPosition: 'bottom',
           duration: 5000,
           panelClass: 'success'
         })
@@ -47,7 +47,7 @@ export class OffertsComponent implements OnInit {
       } else {
         this.snackBar.open(res.error, '', {
           horizontalPosition: 'end',
-          verticalPosition: 'top',
+          verticalPosition: 'bottom',
           duration: 5000,
           panelClass: 'error'
         })

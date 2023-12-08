@@ -1,3 +1,15 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .content {
+    flex: 1 1 100%;
+    background: whitesmoke;
+  }
+}
+
 .list {
   display: flex;
   background: whitesmoke;
@@ -26,6 +38,7 @@
       margin-top: 20px;
       text-align: center;
     }
+
     .no-results {
       font-size: 18px;
       font-weight: 700;
@@ -83,7 +96,7 @@ main {
 
 
   h6 {
-    margin: 10px 0;
+    margin: 12px 0;
   }
 }
 
@@ -98,6 +111,7 @@ main {
   border-radius: 10px;
   margin-bottom: 20px;
   position: relative;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
   .job-remove {
     position: absolute;

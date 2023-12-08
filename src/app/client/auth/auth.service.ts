@@ -23,7 +23,7 @@ export class AuthService {
         this.router.navigateByUrl(`/` + (role === 'recruiter' ? role : ''));
         this.snackBar.open('Welcome!', '', {
           horizontalPosition: 'end',
-          verticalPosition: 'top',
+          verticalPosition: 'bottom',
           duration: 5000,
           panelClass: 'success'
         })
@@ -31,7 +31,7 @@ export class AuthService {
         if (!res.token) {
           this.snackBar.open('The user is not found. Try again!', '', {
             horizontalPosition: 'end',
-            verticalPosition: 'top',
+            verticalPosition: 'bottom',
             duration: 5000,
             panelClass: 'error'
           })
@@ -46,7 +46,7 @@ export class AuthService {
       this.router.navigateByUrl(`/auth/login`);
       this.snackBar.open('Success. First you have to Login!', '', {
         horizontalPosition: 'end',
-        verticalPosition: 'top',
+        verticalPosition: 'bottom',
         duration: 5000,
         panelClass: 'success'
       })
@@ -58,7 +58,7 @@ export class AuthService {
     this.router.navigate(['auth/login']);
     this.snackBar.open('Log out successfully', '', {
       horizontalPosition: 'end',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       duration: 5000,
       panelClass: 'success'
     })

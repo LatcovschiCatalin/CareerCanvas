@@ -235,7 +235,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       });
       this.snackBar.open('Users deleted successfully', '', {
         horizontalPosition: 'end',
-        verticalPosition: 'top',
+        verticalPosition: 'bottom',
         duration: 5000,
         panelClass: 'success'
       })
@@ -333,7 +333,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
           this.id = '-1';
           this.snackBar.open('Job updated successfully', '', {
             horizontalPosition: 'end',
-            verticalPosition: 'top',
+            verticalPosition: 'bottom',
             duration: 5000,
             panelClass: 'success'
           });
@@ -346,7 +346,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
           this.add = false;
           this.snackBar.open('Job added successfully', '', {
             horizontalPosition: 'end',
-            verticalPosition: 'top',
+            verticalPosition: 'bottom',
             duration: 5000,
             panelClass: 'success'
           });
