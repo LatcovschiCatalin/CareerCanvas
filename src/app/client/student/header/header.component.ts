@@ -13,13 +13,15 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 export class HeaderComponent implements OnInit {
 
   user: any;
+  userId = localStorage.getItem('user_id');
 
   constructor(private sanitizer: DomSanitizer, private usersService: UsersService, private authService: AuthService, private cookieService: CookieService) {
+    this.userId = this.authService.parseJwt(this.authService.getToken() || '').sub.id;
   }
 
   ngOnInit(): void {
-    this.usersService.userInfo().subscribe((res) => {
-      this.user = res;
+    this.usersService.userInfoId(this.userId).subscribe((user) => {
+      this.user = user;
     })
   }
 

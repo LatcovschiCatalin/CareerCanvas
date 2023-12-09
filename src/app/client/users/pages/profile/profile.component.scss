@@ -1,0 +1,108 @@
+.mat-form-field {
+  width: 50px;
+}
+
+.container {
+  background-color: whitesmoke;
+  padding: 0px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+
+  .details {
+    display: flex;
+    justify-content: flex-start;
+    gap: 5px;
+  }
+
+  .action {
+    margin-right: 10px;
+  }
+
+  .icon {
+    width: 18px;
+  }
+
+  .edit, .save {
+    cursor: pointer;
+  }
+
+  .field {
+    border: 0;
+    outline: none;
+  }
+
+  .profile {
+    padding: 50px;
+    display: flex;
+    justify-content: space-between;
+    column-gap: 100px;
+
+    .left {
+      flex: 1 1 100%;
+
+      .title {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 25px;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 20px;
+        border-top: 2px solid gray;
+
+        .item {
+          width: 100%;
+          background: white;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-radius: 5px;
+          padding: 15px;
+
+          .left {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+
+            .details .label {
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+
+    .right {
+      margin-right: 50px;
+      display: flex;
+      flex-direction: column;
+
+      .avatar img {
+        width: 150px;
+        height: 150px;
+        margin-top: 36px;
+      }
+
+      .upload {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+
+      .button {
+        margin-top: 20px;
+        padding: 10px;
+        background: darkgray;
+        text-align: center;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+}
