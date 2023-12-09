@@ -100,6 +100,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private sanitizer: DomSanitizer, private users: UsersService, private authService: AuthService) {
     this.userId = this.authService.parseJwt(this.authService.getToken() || '').sub.id;
+    console.log(this.userId)
   }
 
   ngOnInit(): void {

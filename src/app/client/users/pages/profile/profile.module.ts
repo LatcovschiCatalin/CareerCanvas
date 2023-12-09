@@ -14,7 +14,6 @@ import {ProfileComponent} from './profile.component';
 
 @NgModule({
   declarations: [
-    FooterComponent,
     ProfileComponent
   ],
   imports: [
@@ -23,7 +22,8 @@ import {ProfileComponent} from './profile.component';
     FormsModule,
     MatPaginatorModule,
     NavbarComponent,
-    MatSelectModule
+    MatSelectModule,
+    FooterComponent
   ]
 })
 export class ProfileModule {

@@ -16,8 +16,7 @@ import {JobsService} from "../../server/jobs/jobs.service";
 
 @NgModule({
   declarations: [
-    UsersComponent,
-    FooterComponent],
+    UsersComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -26,6 +25,7 @@ import {JobsService} from "../../server/jobs/jobs.service";
     FormsModule,
     NavbarComponent,
     ServicesModule,
+    FooterComponent
   ],
   providers: [CookieService, UsersService, JobsService]
 })

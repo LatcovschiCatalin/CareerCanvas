@@ -4,12 +4,14 @@ import {UsersService} from "../../../server/users/users.service";
 import {CookieService} from "ngx-cookie-service";
 import * as base64js from 'base64-js';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
+  imports: [CommonModule],
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit {
@@ -20,12 +22,14 @@ export class NavbarComponent implements OnInit {
   }
 
   user: any;
+  userId;
 
   constructor(private sanitizer: DomSanitizer, private authService: AuthService, private usersService: UsersService, private cookieService: CookieService) {
+    this.userId = this.authService.parseJwt(this.authService.getToken() || '').sub.id;
   }
 
   ngOnInit(): void {
-    this.usersService.userInfo().subscribe((res) => {
+    this.usersService.userInfoId(this.userId).subscribe((res) => {
       this.user = res;
     })
   }
