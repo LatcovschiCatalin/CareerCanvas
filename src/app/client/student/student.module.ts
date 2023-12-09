@@ -11,6 +11,8 @@ import {FooterComponent} from './footer/footer.component';
 import {SelectedJobsComponent} from './jobs/selected-jobs/selected-jobs.component';
 import {JobDescriptionComponent} from './jobs/job-description/job-description.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
+import { ProfileComponent } from './jobs/profile/profile.component';
 
 
 @NgModule({
@@ -21,13 +23,15 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     JobsListComponent,
     FooterComponent,
     SelectedJobsComponent,
-    JobDescriptionComponent
+    JobDescriptionComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
     StudentRoutingModule,
     FormsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule
   ]
 })
 export class StudentModule {

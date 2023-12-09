@@ -1,0 +1,67 @@
+<div class="container">
+  <app-header></app-header>
+  <div class="profile">
+    <div class="left">
+      <div class="title">Update Profile</div>
+      <div class="content">
+        <div class="item" *ngFor="let el of data; let i=index">
+          <div class="left">
+            <img class="icon" [src]="el.icon">
+            <div class="details">
+              <span class="label">{{el.label}}: </span>
+              <span class="value"
+                    *ngIf="!el.edit; else enterData">{{el.type !== 'password' ? user[el.key] : secret}}</span>
+              <ng-template #enterData>
+                <ng-container *ngIf="el.type === 'select'; else others">
+                  <mat-form-field>
+                    <mat-select (selectionChange)="changeGender($event.value)">
+                      <mat-option *ngFor="let gender of genders" [value]="gender">{{gender}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ng-container>
+                <ng-template #others>
+                  <input autocomplete="off" class="field" [type]="el.type" (change)="updateValue(i, $event)"
+                         [value]="el.type !== 'password' ? user[el.key] : ''">
+                </ng-template>
+              </ng-template>
+            </div>
+          </div>
+          <div class="action">
+            <img class="icon edit" *ngIf="!el.edit; else save" (click)="startEdit(i)" src="assets/icons/light/edit.png">
+            <ng-template #save>
+              <img class="icon save" (click)="saveEdit(i, el.key)" src="assets/icons/light/save.png">
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="avatar">
+        <ng-container *ngIf="avatar; else noImage">
+          <img [src]="avatar !== user.avatar ? avatar : getImageUrl(avatar)" alt="avatar">
+        </ng-container>
+        <ng-template #noImage>
+          <img src="https://assets.moxfield.net/assets/images/no-user-found.png" alt="avatar">
+        </ng-template>
+      </div>
+      <div class="button  upload">
+        <svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg" color="#fff">
+          <path d="M6 20L18 20" stroke="#fff" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round"></path>
+          <path d="M12 16V4M12 4L15.5 7.5M12 4L8.5 7.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round"></path>
+        </svg>
+        <span> </span>
+        <input type="file" id="fileInput" style="display: none" (change)="onFileSelected($event)" #fileUpload>
+        <label for="fileInput">
+          <span>Upload photo</span>
+        </label>
+      </div>
+      <div class="submit">
+        <div class="edit button" (click)="submit()">Save changes</div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

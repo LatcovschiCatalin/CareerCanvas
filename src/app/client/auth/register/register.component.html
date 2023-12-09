@@ -11,6 +11,7 @@
                    [ngClass]="{'invalid': customForm.get(item.key)?.invalid && (customForm.get(item.key)?.dirty || customForm.get(item.key)?.touched)}">
                 <label>{{item.title}}</label>
                 <input class="sign-input"
+                       autocomplete="off"
                        [type]="item.type"
                        [formControlName]="item.key"
                        [placeholder]="item.title"
