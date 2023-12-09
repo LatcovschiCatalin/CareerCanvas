@@ -78,6 +78,15 @@ export class UsersService {
       );
   }
 
+  userInfoId(user_id: any): Observable<any> {
+    const params = new HttpParams().set('user_id', user_id);
+
+    return this.httpClient.get<any>(this.apiServer + '/users/getinfobyid', { params, headers: this.httpOptions.headers })
+      .pipe(
+        catchError(this.errorHandler)
+      );
+  }
+
   updateProfile(user: any): Observable<any> {
     const formData = new FormData();
     formData.append('first_name', user.first_name);
