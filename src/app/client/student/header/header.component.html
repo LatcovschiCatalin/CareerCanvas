@@ -20,7 +20,7 @@
     <a href="./mylist">
       <img class="notifications" src="https://pixlok.com/wp-content/uploads/2022/01/Notification-SVG-Icon-skkcs.png">
     </a>
-    <a routerLink="./profile">
+    <a href="./profile">
       <ng-container *ngIf="user.avatar; else noImage">
         <img [src]="getImageUrl(user.avatar)" alt="avatar">
       </ng-container>

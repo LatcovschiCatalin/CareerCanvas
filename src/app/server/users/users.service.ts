@@ -78,7 +78,24 @@ export class UsersService {
       );
   }
 
+  updateProfile(user: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('first_name', user.first_name);
+    formData.append('last_name', user.last_name);
+    formData.append('email', user.email);
+    if (user.password) formData.append('password', user.password);
+    formData.append('date_of_birth', user.date_of_birth);
+    formData.append('gender', user.gender);
+    formData.append('phone', user.phone);
+    formData.append('address', user.address);
+    formData.append('skills', user.skills);
+    formData.append('avatar', user.avatar);
 
+    return this.httpClient.put(this.apiServer + '/users/update', formData, this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+      );
+  }
   userJobs(): Observable<any> {
     return this.httpClient.get<any>(this.apiServer + '/users/getrecruiterjobs', this.httpOptions)
       .pipe(

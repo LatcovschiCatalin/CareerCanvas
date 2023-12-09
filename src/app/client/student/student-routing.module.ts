@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {StudentComponent} from "./student.component";
 import {SelectedJobsComponent} from "./jobs/selected-jobs/selected-jobs.component";
 import {JobDescriptionComponent} from "./jobs/job-description/job-description.component";
+import {ProfileComponent} from "./jobs/profile/profile.component";
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'mylist',
     component: SelectedJobsComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
   }
 ];
 
